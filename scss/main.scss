@@ -1,0 +1,25 @@
+@use "./base/reset";
+@use "./abstracts/utils";
+@use "./base/typography";
+@use "./components/buttons";
+@use "./components/cards";
+@use "./layout/header";
+@use "./layout/navigation";
+@use "./layout/grid";
+@use "./layout/forms";
+@use "./layout/footer";
+@use "./layout/sections";
+
+#box{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+}
+
+.red{
+    background-color: red;
+}
+
+.blue{
+    background-color: rgb(20, 160, 199);
+}

@@ -1,0 +1,84 @@
+@use "../abstracts/variables" as *;
+
+h1{
+    font-family: $ff-title;
+    font-size: $fs-gt;
+    line-height: 1.5rem;
+}
+
+h3{
+    font-family: $ff-script;
+    font-size: $fs-xl;
+    padding-top: 1rem;
+}
+
+.text-white{
+    color: $clr-main;
+}
+
+.text-dark{
+    color: $clr-dark;
+}
+
+.text-gray{
+    color: $clr-gray;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.text-left{
+    text-align: left;
+}
+
+.typography-description{
+    font-size: $fs-xnm;
+    font-weight: $fw-semibold;
+    padding: 2rem 5rem;
+}
+
+.explore-title{
+    font-size: $fs-xmd;
+    font-weight: $fw-bold;
+    margin-bottom: 2rem;
+}
+
+.main-level{
+    font-size: $fs-xmd;
+    font-weight: $fw-light;
+    border-bottom: .1rem solid $clr-dark;
+    padding-bottom: 1rem;
+}
+
+.explore-description{
+    padding-top: 1rem;
+    font-size: $fs-xnm;
+    
+  
+}
+
+.footer-title{
+    font-size: $fs-xnm;
+    margin-bottom: 2rem;
+}
+.about-description{
+    font-size: $fs-xnm;
+    margin: 1rem;
+}
+
+.about-title{
+    font-size: $fs-xnm;
+}
+
+.footer-link{
+    text-decoration: none;
+    color: $clr-blue;
+    font-size: $fs-nm;
+    font-weight: $fw-light;
+}
+
+.about-title{
+    font-size: $fs-lg;
+}
+

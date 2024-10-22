@@ -1,0 +1,65 @@
+@use "../abstracts/variables" as *;
+
+.relative {
+    position: relative;
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-content {
+    justify-content: center;
+}
+.justify-content-left {
+    justify-content: left;
+}
+
+.padT10 {
+    padding-top: 10rem;
+}
+
+.padT3 {
+    padding-top: 3rem;
+}
+
+.padR10 {
+    padding-right: 10rem;
+}
+
+.padL35 {
+    padding-left: 35rem;
+}
+
+
+.w70 {
+    width: 70%;
+}
+
+.w50 {
+    width: 50%;
+}
+
+.w100 {
+    width: 100%;
+}
+
+.w-mainlogo{
+
+    width: auto;
+
+    @media (max-width: 800px) {
+        width: 75%;
+    }
+}
+
+.display-top-logo {
+    @media (max-width: 800px) {
+        display: none;
+}
+
+}
+
+.auto {
+    margin: auto;
+}

@@ -1,0 +1,84 @@
+@use "../abstracts/variables" as *;
+
+.btn{
+    display: inline-block;
+    text-decoration: none;
+    font-size: $fs-nm;
+    font-weight: $fw-semibold;
+    padding: .5rem 1rem;
+    color: $clr-main;
+    border-radius: 2rem;
+}
+
+.btn-play{
+    display: inline-block;
+    text-decoration: none;
+    font-size: $fs-nm;
+    font-weight: $fw-semibold;
+    padding: .2rem 4rem;
+    color: $clr-main;
+    border-radius: 2rem;
+}
+
+
+.white-btn{
+    border-color: $clr-main;
+    color: $clr-main;
+    border: .25rem solid;
+    transition: transform 0.5s ease
+}
+
+.dark-btn{
+    border-color: $clr-dark;
+    color: $clr-dark;
+    border: .1rem solid;
+}
+
+.yellow-btn{
+    border: none;
+    border-radius: 0;
+    background: $clr-blue;
+    color: $clr-dark;
+}
+
+.solid-btn{
+    border: none;
+    border-radius: 0;
+    background: $clr-main;
+    color: $clr-dark;
+}
+
+.search-btn{
+    position: relative;
+    left: 3rem;
+    border: none;
+    background: url(../../img/search.png) no-repeat;
+    width: 22px;
+    height: 22px;
+    text-indent: 100%;
+    cursor: pointer;
+}
+
+.white-btn:hover {
+    transform: scale(1.1); /* Hace el botón un 10% más grande */
+}
+
+.logIn-btn{
+    font-family: $ff-main;
+
+    background: $clr-light-blue;
+
+    padding: .5rem 2.5rem;
+
+    border-radius: 1rem;
+
+    border-color: $clr-main;
+
+    color: $clr-main;
+   
+    transition: transform 0.5s ease
+}
+
+.logIn-btn:hover {
+    transform: scale(1.1); /* Hace el botón un 10% más grande */
+}

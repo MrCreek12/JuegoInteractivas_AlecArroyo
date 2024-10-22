@@ -1,0 +1,74 @@
+{
+   "player": {
+      "x": 190,
+      "y": 535,
+      "frame": 3
+   },
+   "goal": {
+      "x": 0,
+      "y": 10,
+      "frame": 3
+   },
+   "PowerUps": [
+      {
+         "x": 600,
+         "y": 640
+      },
+      {
+         "x": 1320,
+         "y": 290
+      },
+      {
+         "x": 2040,
+         "y": 514
+      },
+      {
+         "x": 2800,
+         "y": 545
+      }
+   ],
+   "platforms": [
+      {
+         "x": 880,
+         "y": 650,
+         "tiles": 1,
+         "key": "grPlatform"
+      },
+      {
+         "x": 1300,
+         "y": 430,
+         "tiles": 1,
+         "key": "airPlatform"
+      },
+      {
+         "x": 1700,
+         "y": 370,
+         "tiles": 1,
+         "key": "airPlatform"
+      },
+      {
+         "x": 2020,
+         "y": 650,
+         "tiles": 1,
+         "key": "grPlatform"
+      },
+      {
+         "x": 2600,
+         "y": 650,
+         "tiles": 1,
+         "key": "grPlatform"
+      },
+      {
+         "x": 3000,
+         "y": 380,
+         "tiles": 1,
+         "key": "airPlatform"
+      },
+      {
+         "x": 1000,
+         "y": 820,
+         "tiles": 1,
+         "key": "MainGround"
+      }
+   ]
+ }

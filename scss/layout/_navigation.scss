@@ -1,0 +1,56 @@
+@use "../abstracts/variables" as *;
+
+.top-nav {
+    display: flex;
+    list-style-type: none;
+
+    gap: 2rem;
+    margin: 0;
+    
+    @media (max-width: 800px) {
+        display: block;
+        justify-content: center; // Centra los elementos
+        padding: .1rem .5rem;
+        font-size: $fs-nm;
+    }
+}
+
+.main-nav {
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-between; /* Centra horizontalmente */
+    align-items: center;     /* Centra verticalmente */
+    padding: 1rem 2rem 1rem;
+
+    @media (max-width: 800px) {
+        padding: 1rem 0rem 1rem;
+    }
+      
+}
+
+.btn-container {
+    display: flex;
+    gap: 1rem;
+    margin-right: 1rem;
+}
+
+
+.nav-list-item {
+    display: flex;
+    border-radius: .5rem;
+    padding: .25rem .5rem;
+    transition: color 2s ease;
+
+    
+}
+
+.nav-list-item:hover {
+    background: $clr-light-dark;
+}
+
+.nav-list-link {
+    color: $clr-main;
+    font-size: $fs-xnm;
+    text-decoration: none;
+    font-weight: $fw-light;
+}

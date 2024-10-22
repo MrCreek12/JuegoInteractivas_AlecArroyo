@@ -1,0 +1,22 @@
+@use "../abstracts/variables" as *;
+.search-map{
+    line-height: 0;
+}
+
+.search-field{
+    font-family: $ff-main;
+    background:$clr-light-violet;
+    border: none;
+    padding: 1rem 2.5rem;
+    width: 80%;
+    border-radius: 1rem;
+    color: $clr-light-blue;
+    text-align: left;
+}
+
+
+
+
+.search-field::placeholder{
+    color: $clr-main;
+}

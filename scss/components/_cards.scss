@@ -1,0 +1,52 @@
+@use "../abstracts/variables" as *;
+
+.card{
+    position: relative;
+    border: .35rem solid $clr-main;
+    border-radius: 3rem;
+    display: grid;
+    max-width: fit-content;
+    margin-top: 5rem;
+}
+
+.img-component{
+    transition: transform 0.5s ease;
+    height: auto;
+    
+}
+
+.img-component-home{
+    transition: transform 0.5s ease;
+    width: 20%;
+    height: auto;
+    
+    @media (max-width: 800px) {
+        width: 100%;
+    }
+
+}
+
+.img-component:hover{
+    transform: scale(1.1); /* Hace el botón un 10% más grande */
+
+
+}
+.img-component-home:hover{
+    transform: scale(1.1); /* Hace el botón un 10% más grande */
+
+
+}
+
+.card-explore{
+    padding-top: 3rem;
+    margin-left: 2rem;
+    width: 40%;
+}
+
+.login-card{
+
+    width: 60%;
+    background-color: $clr-light-blue;
+    border-radius: 3rem;
+    padding-bottom: 5rem;
+}

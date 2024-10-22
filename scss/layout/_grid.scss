@@ -1,0 +1,50 @@
+@use "../abstracts/variables" as *;
+
+.columns-container{
+    display: grid;
+    /*margin: 2rem auto;*/
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1.5rem;
+    
+
+    @media (max-width: 800px) {
+        display: block;
+        justify-content: center; // Centra los elementos
+        padding: .1rem .5rem;
+        font-size: $fs-nm;
+    }
+}
+
+.columns-container-imgs-home{
+    display: grid;
+    /*margin: 2rem auto;*/
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1.5rem;
+    justify-items: center; /* Alinea horizontalmente */
+  align-items: center; 
+
+}
+
+
+.footer-list{
+    list-style-type: none;
+}
+
+.footer-list-item{
+    display: flex;
+    justify-content: space-around;
+}
+
+.memorable-description{
+    // background: url(../img/black-box-sm.png) center no-repeat;
+    background-size: contain;
+    width: 60%;
+    font-size: $fs-xnm;
+    margin: 0 auto;
+    padding: 1rem 1rem;
+}
+
+.discover-title{
+    // background: url(../img/black-box-sm.png) center no-repeat;
+    font-size: $fs-xmd;
+}

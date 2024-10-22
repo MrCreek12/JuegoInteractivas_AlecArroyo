@@ -1,0 +1,48 @@
+import Animations from './Animations.js';
+
+export default class Player extends Phaser.Physics.Arcade.Sprite {
+
+    constructor(scene, x, y, key,) {
+        super(scene, x, y, key);
+        this.setScale(0.4);
+
+        scene.add.existing(this);
+
+        scene.physics.add.existing(this);
+
+        this.body.allowGravity = true;
+
+        this.body.setSize(120, 600);
+
+        this.body.setOffset(100, 0);
+
+        // Inicializamos las animaciones para este jugador
+        this.animations = new Animations(scene);
+
+        
+
+    }
+
+    update(cursors) {
+        // Verifica si la tecla derecha está presionada
+        this.setVelocityX(0);
+
+        if (cursors.right.isDown) {
+        this.play('walk', true);
+        this.setVelocityX(400);
+        this.flipX = false; // Asegúrate de que el personaje mire a la derecha
+        } else if (cursors.left.isDown) {
+        this.play('walk', true);
+        this.setVelocityX(-400);
+        this.flipX = true; // Hacer que el personaje mire a la izquierda
+        } else {
+        this.play('static', true);
+        }
+        
+        // Saltar
+        if (cursors.up.isDown && this.body.touching.down) {
+        this.setVelocityY(-1000); // Ajusta la fuerza del salto
+        }
+    }
+
+}

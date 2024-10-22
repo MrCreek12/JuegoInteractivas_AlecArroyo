@@ -1,0 +1,13 @@
+@use "../abstracts/variables" as *;
+
+.logo{
+    align-items: flex-start;
+   
+}
+
+.header-section{
+    background: url(../imgs/ArieneHeader.png) no-repeat;
+    background-size: cover;
+    background-color: $clr-blue;
+    padding-bottom: 15rem;
+}

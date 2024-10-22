@@ -1,0 +1,506 @@
+@charset "UTF-8";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Kadwa", sans-serif;
+  font-size: 4rem;
+  font-weight: 100;
+}
+@media (max-width: 800apx) {
+  body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+}
+
+canvas {
+  width: 70%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+p, li, caption {
+  text-wrap: pretty;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+}
+
+.relative {
+  position: relative;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-content {
+  justify-content: center;
+}
+
+.justify-content-left {
+  justify-content: left;
+}
+
+.padT10 {
+  padding-top: 10rem;
+}
+
+.padT3 {
+  padding-top: 3rem;
+}
+
+.padR10 {
+  padding-right: 10rem;
+}
+
+.padL35 {
+  padding-left: 35rem;
+}
+
+.w70 {
+  width: 70%;
+}
+
+.w50 {
+  width: 50%;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.w-mainlogo {
+  width: auto;
+}
+@media (max-width: 800px) {
+  .w-mainlogo {
+    width: 75%;
+  }
+}
+
+@media (max-width: 800px) {
+  .display-top-logo {
+    display: none;
+  }
+}
+
+.auto {
+  margin: auto;
+}
+
+h1 {
+  font-family: "Labor Union", sans-serif;
+  font-size: 6.25rem;
+  line-height: 1.5rem;
+}
+
+h3 {
+  font-family: "Nickainley", sans-serif;
+  font-size: 4rem;
+  padding-top: 1rem;
+}
+
+.text-white {
+  color: hsl(0, 0%, 100%);
+}
+
+.text-dark {
+  color: hsl(218, 13%, 17%);
+}
+
+.text-gray {
+  color: #C7B8B8;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.typography-description {
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 2rem 5rem;
+}
+
+.explore-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.main-level {
+  font-size: 2.5rem;
+  font-weight: 100;
+  border-bottom: 0.1rem solid hsl(218, 13%, 17%);
+  padding-bottom: 1rem;
+}
+
+.explore-description {
+  padding-top: 1rem;
+  font-size: 1.25rem;
+}
+
+.footer-title {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.about-description {
+  font-size: 1.25rem;
+  margin: 1rem;
+}
+
+.about-title {
+  font-size: 1.25rem;
+}
+
+.footer-link {
+  text-decoration: none;
+  color: #000929;
+  font-size: 1rem;
+  font-weight: 100;
+}
+
+.about-title {
+  font-size: 3.75rem;
+}
+
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  color: hsl(0, 0%, 100%);
+  border-radius: 2rem;
+}
+
+.btn-play {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.2rem 4rem;
+  color: hsl(0, 0%, 100%);
+  border-radius: 2rem;
+}
+
+.white-btn {
+  border-color: hsl(0, 0%, 100%);
+  color: hsl(0, 0%, 100%);
+  border: 0.25rem solid;
+  transition: transform 0.5s ease;
+}
+
+.dark-btn {
+  border-color: hsl(218, 13%, 17%);
+  color: hsl(218, 13%, 17%);
+  border: 0.1rem solid;
+}
+
+.yellow-btn {
+  border: none;
+  border-radius: 0;
+  background: #000929;
+  color: hsl(218, 13%, 17%);
+}
+
+.solid-btn {
+  border: none;
+  border-radius: 0;
+  background: hsl(0, 0%, 100%);
+  color: hsl(218, 13%, 17%);
+}
+
+.search-btn {
+  position: relative;
+  left: 3rem;
+  border: none;
+  background: url(../../img/search.png) no-repeat;
+  width: 22px;
+  height: 22px;
+  text-indent: 100%;
+  cursor: pointer;
+}
+
+.white-btn:hover {
+  transform: scale(1.1); /* Hace el botón un 10% más grande */
+}
+
+.logIn-btn {
+  font-family: "Kadwa", sans-serif;
+  background: #272E45;
+  padding: 0.5rem 2.5rem;
+  border-radius: 1rem;
+  border-color: hsl(0, 0%, 100%);
+  color: hsl(0, 0%, 100%);
+  transition: transform 0.5s ease;
+}
+
+.logIn-btn:hover {
+  transform: scale(1.1); /* Hace el botón un 10% más grande */
+}
+
+.card {
+  position: relative;
+  border: 0.35rem solid hsl(0, 0%, 100%);
+  border-radius: 3rem;
+  display: grid;
+  max-width: fit-content;
+  margin-top: 5rem;
+}
+
+.img-component {
+  transition: transform 0.5s ease;
+  height: auto;
+}
+
+.img-component-home {
+  transition: transform 0.5s ease;
+  width: 20%;
+  height: auto;
+}
+@media (max-width: 800px) {
+  .img-component-home {
+    width: 100%;
+  }
+}
+
+.img-component:hover {
+  transform: scale(1.1); /* Hace el botón un 10% más grande */
+}
+
+.img-component-home:hover {
+  transform: scale(1.1); /* Hace el botón un 10% más grande */
+}
+
+.card-explore {
+  padding-top: 3rem;
+  margin-left: 2rem;
+  width: 40%;
+}
+
+.login-card {
+  width: 60%;
+  background-color: #272E45;
+  border-radius: 3rem;
+  padding-bottom: 5rem;
+}
+
+.logo {
+  align-items: flex-start;
+}
+
+.header-section {
+  background: url(../imgs/ArieneHeader.png) no-repeat;
+  background-size: cover;
+  background-color: #000929;
+  padding-bottom: 15rem;
+}
+
+.top-nav {
+  display: flex;
+  list-style-type: none;
+  gap: 2rem;
+  margin: 0;
+}
+@media (max-width: 800px) {
+  .top-nav {
+    display: block;
+    justify-content: center;
+    padding: 0.1rem 0.5rem;
+    font-size: 1rem;
+  }
+}
+
+.main-nav {
+  padding-top: 1rem;
+  display: flex;
+  justify-content: space-between; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  padding: 1rem 2rem 1rem;
+}
+@media (max-width: 800px) {
+  .main-nav {
+    padding: 1rem 0rem 1rem;
+  }
+}
+
+.btn-container {
+  display: flex;
+  gap: 1rem;
+  margin-right: 1rem;
+}
+
+.nav-list-item {
+  display: flex;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  transition: color 2s ease;
+}
+
+.nav-list-item:hover {
+  background: hsl(220, 5%, 36%);
+}
+
+.nav-list-link {
+  color: hsl(0, 0%, 100%);
+  font-size: 1.25rem;
+  text-decoration: none;
+  font-weight: 100;
+}
+
+.columns-container {
+  display: grid;
+  /*margin: 2rem auto;*/
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1.5rem;
+}
+@media (max-width: 800px) {
+  .columns-container {
+    display: block;
+    justify-content: center;
+    padding: 0.1rem 0.5rem;
+    font-size: 1rem;
+  }
+}
+
+.columns-container-imgs-home {
+  display: grid;
+  /*margin: 2rem auto;*/
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1.5rem;
+  justify-items: center; /* Alinea horizontalmente */
+  align-items: center;
+}
+
+.footer-list {
+  list-style-type: none;
+}
+
+.footer-list-item {
+  display: flex;
+  justify-content: space-around;
+}
+
+.memorable-description {
+  background-size: contain;
+  width: 60%;
+  font-size: 1.25rem;
+  margin: 0 auto;
+  padding: 1rem 1rem;
+}
+
+.discover-title {
+  font-size: 2.5rem;
+}
+
+.search-map {
+  line-height: 0;
+}
+
+.search-field {
+  font-family: "Kadwa", sans-serif;
+  background: #3E4663;
+  border: none;
+  padding: 1rem 2.5rem;
+  width: 80%;
+  border-radius: 1rem;
+  color: #272E45;
+  text-align: left;
+}
+
+.search-field::placeholder {
+  color: hsl(0, 0%, 100%);
+}
+
+.footer-content {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  width: 85%;
+}
+
+.center-header-content {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  /* Centra verticalmente */
+}
+
+.about-section {
+  background: url(../imgs/about-section.png) no-repeat;
+  background-size: cover;
+  padding-top: 10rem;
+}
+
+.game-section {
+  background: url(../imgs/about-section.png) no-repeat;
+  background-size: cover;
+}
+
+.game-section canvas {
+  width: 70%;
+}
+
+.login-section {
+  background: url(../imgs/about-section.png) no-repeat;
+  background-size: cover;
+  padding-top: 10rem;
+  padding-bottom: 10rem;
+}
+
+.explore-section {
+  background: url(../imgs/explore-section.png) no-repeat;
+  background-size: cover;
+  padding-top: 3rem;
+  padding-bottom: 10rem;
+}
+
+.explore-section img {
+  max-width: 80%; /* La imagen ocupará el 45% del ancho del contenedor */
+  height: auto;
+}
+
+.discover-section {
+  background: url(../imgs/about-section.png) no-repeat;
+  background-size: cover;
+  padding-top: 3rem;
+  padding-bottom: 10rem;
+}
+
+.ready-section {
+  background: url(../imgs/ArieneHeader.png) no-repeat;
+  background-size: cover;
+  padding-bottom: 17rem;
+  padding-top: 10rem;
+}
+
+#box {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+}
+
+.red {
+  background-color: red;
+}
+
+.blue {
+  background-color: rgb(20, 160, 199);
+}
+
+/*# sourceMappingURL=main.css.map */
