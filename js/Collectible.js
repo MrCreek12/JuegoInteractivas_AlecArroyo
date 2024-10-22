@@ -15,7 +15,7 @@ export default class Collectible extends Phaser.GameObjects.Sprite {
       this.body.immovable = true;
   
       // Reproducir la animación
-      this.anims.play('burning');
+      
     }
   
     // Puedes agregar métodos personalizados para el objeto, como desvanecerse

@@ -19,5 +19,12 @@ export default class PlayerAnimations {
             frameRate: 26,
             repeat: -1,
         });
+
+        this.scene.anims.create({
+            key: 'enemy-idle',
+            frames: this.scene.anims.generateFrameNumbers('enemy-idle', { start: 0, end: 99 }),
+            frameRate: 26,
+            repeat: -1,
+        });
     }
 }
