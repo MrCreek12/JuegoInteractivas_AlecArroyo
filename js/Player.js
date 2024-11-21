@@ -3,6 +3,7 @@ import Animations from './Animations.js';
 export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     constructor(scene, x, y, key,) {
+        
         super(scene, x, y, key);
 
         scene.add.existing(this);
@@ -11,11 +12,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.body.allowGravity = true;
         
-
+         this.scene = scene;
         // Inicializamos las animaciones para este jugador
         this.animations = new Animations(scene);
-
         
+        this.invulnerable=false;
+        this.collide=false;
 
     }
 

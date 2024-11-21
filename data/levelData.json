@@ -4,11 +4,36 @@
       "y": 325,
       "frame": 3
    },
-   "enemy": {
+   "enemies": {
       "x": 1500,
       "y": 325,
+      "leftLimit": 200,
+      "rightLimit": 200,
       "frame": 3
    },
+   "enemy": [
+      {
+         "x": 1300,
+         "y": 325,
+         "leftLimit": 2900,
+         "rightLimit": 1,
+         "frame": 3
+      },
+      {
+         "x": 1600,
+         "y": 325,
+         "leftLimit": 2900,
+         "rightLimit": 1,
+         "frame": 3
+      },
+      {
+         "x": 900,
+         "y": 325,
+         "leftLimit": 2900,
+         "rightLimit": 1,
+         "frame": 3
+      }
+   ],
    "PowerUps": [
       {
          "x": 600,
@@ -27,7 +52,6 @@
          "y": 545
       }
    ],
-   
    "platforms": [
       {
          "x": 880,
@@ -72,4 +96,4 @@
          "key": "MainGround"
       }
    ]
- }
+}
