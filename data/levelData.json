@@ -37,19 +37,45 @@
    "PowerUps": [
       {
          "x": 600,
-         "y": 540
+         "y": 540,
+         "type": 1,
+         "key": "PowerUp"
       },
       {
          "x": 1320,
-         "y": 290
+         "y": 290,
+         "type": 1,
+         "key": "PowerUp"
       },
       {
          "x": 2032,
-         "y": 454
+         "y": 454,
+         "type": 1,
+         "key": "PowerUp"
       },
       {
          "x": 2800,
-         "y": 545
+         "y": 545,
+         "type": 1,
+         "key": "PowerUp"
+      },
+      {
+         "x": 300,
+         "y": 640,
+         "type": 2,
+         "key": "red-key"
+      },
+      {
+         "x": 640,
+         "y": 645,
+         "type": 2,
+         "key": "blue-key"
+      },
+      {
+         "x": 200,
+         "y": 650,
+         "type": 2,
+         "key": "yellow-key"
       }
    ],
    "platforms": [

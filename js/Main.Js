@@ -4,8 +4,9 @@ import Platform from "./Platform.js";
 import Collectible from "./Collectible.js";
 import Enemy from "./enemy.js";
 import CollisionManager from "./CollisionManajer.js";
+import Text from "./Text.js";
 
-class Main extends Phaser.Scene {
+export default class Main extends Phaser.Scene {
   constructor() {
     super({ key: 'Main' });
     this.bg = null;
@@ -13,8 +14,11 @@ class Main extends Phaser.Scene {
     this.Ariene = null
     this.score = 0;  // Variable de puntaje, comienza en 0
     this.scoreText = null;  // Definir la propiedad de scoreText
+    this.gameOvertext = null;
+    this.winText = null;
     this.lives = []; // Array para guardar los sprites de las vidas
     this.collisionManager = null;
+    this.invetoryX=20;
 
   }
 
@@ -28,6 +32,10 @@ class Main extends Phaser.Scene {
     this.load.image('airPlatform', 'game_assets/1x/Air Platform 1.png')
     this.load.image('PowerUp', 'game_assets/1x/Power Up.png')
     this.load.image('blueHeart', './game_assets/blue-heart.png')
+    this.load.image('red-key', './game_assets/red-key.png')
+    this.load.image('blue-key', './game_assets/blue-key.png')
+    this.load.image('yellow-key', './game_assets/yellow-key.png')
+
     this.load.spritesheet('idle', './game_assets/idle-small.png', {
       frameWidth: 78,
       frameHeight: 152,
@@ -71,7 +79,7 @@ class Main extends Phaser.Scene {
     this.cameras.main.startFollow(this.Ariene, true, 0.1, 0);
     this.cameras.main.setBounds(0, 0, this.bg.width / 1.75, this.bg.height / 1.75);
 
-    this.createScoreText();
+    this.createText();
     this.createLives();
 
 
@@ -102,11 +110,20 @@ class Main extends Phaser.Scene {
 
 
     this.levelData.PowerUps.forEach((item) => {
-      let collectible = new Collectible(this, item.x, item.y, 'PowerUp', this.Ariene);
+      if (item.type == 1) { 
+        let collectible = new Collectible(this, item.x, item.y, item.key, this.Ariene, item.type);
+        this.add.existing(collectible, true);
+
+      }
+
+      if (item.type == 2) { 
+        let collectible = new Collectible(this, item.x, item.y, item.key, this.Ariene, item.type);
+        this.add.existing(collectible, true);
+      }
+      
 
       //enable physics
-      this.add.existing(collectible, true);
-
+      
       //play burning animatio
 
     });
@@ -124,10 +141,20 @@ class Main extends Phaser.Scene {
   }
 
 
-  createScoreText() {
-    this.scoreText = this.add.text(10, 10, `Puntaje: ${this.score}`, { fontSize: '32px', fill: '#fff' });
-    this.scoreText.setScrollFactor(0);  // Esto asegura que el puntaje sea estático en la pantalla
+  createText() {
+    this.scoreText = new Text(this, 'Puntaje', 10, 10);
+    this.scoreText.setDynamicValue(this.score);
 
+    this.gameOverText = new Text(this, 'Game Over',  0, 0);
+    this.gameOverText.setVisible(false);
+    this.gameOverText.setFontSize('64px');
+    this.gameOverText.centerText();
+
+    this.winText = new Text(this, '¡Ganaste!',  0, 0);
+    this.winText.setVisible(false);
+    this.winText.setColor('#d2ff2d');
+    this.winText.setFontSize('64px');
+    this.winText.centerText();
 
   }
 
@@ -145,27 +172,57 @@ class Main extends Phaser.Scene {
 
   loseLife() {
     if (this.lives.length > 0) {
-      const lostHeart = this.lives.pop(); // Eliminar una vida
-      lostHeart.destroy(); // Quitar el sprite de la pantalla
+      const lostHeart = this.lives.pop(); 
+      lostHeart.destroy(); 
     }
     if (this.lives.length === 0) {
+      this.gameOver();
       console.log("Game Over");
-      // Aquí puedes manejar la lógica de fin del juego
     }
   }
 
-  // Esta función actualizará el texto con el puntaje actual
   updateScoreDisplay() {
-    if (this.scoreText) {
-      this.scoreText.setText(`Puntaje: ${this.score}`);
-    }
-    if (this.liveText) {
-      this.liveText.setText(`vida: ${this.liveText}`);
-    }
+     this.scoreText.updateValue(this.score);
   }
+
+   gameOver(){
+    this.physics.pause();
+    // Mostrar un texto de "Game Over"
+    this.gameOverText.setVisible(true);
+    this.input.keyboard.enabled = false;
+
+    this.time.delayedCall(3000, () => {
+         this.scene.restart(); // Reinicia la escena después de 3 segundos
+         this.input.keyboard.enabled = true;
+         this.score = 0;
+         this.invetoryX=20;
+
+
+    });
+}
+
+
+winGame() {
+  // Pausa el juego
+  this.physics.pause();
+
+  // Mostrar mensaje de victoria
+  this.winText.setVisible(true);
+  // Reinicia el juego después de un tiempo o realiza otras acciones
+  this.time.delayedCall(3000, () => {
+    this.scene.restart(); // Reinicia la escena
+    this.score = 0; // Reinicia el puntaje si es necesario
+    this.invetoryX=20;
+  });
+
+}
 
 
   update() {
+   if (this.enemies.getLength() === 0) {
+     this.winGame();
+   }
+   
     this.enemies.children.iterate((enemy) => {
       // Puedes agregar lógica adicional para cada enemigo, si es necesario
       if (enemy) { // Asegúrate de que "enemy" no sea undefined
@@ -179,28 +236,3 @@ class Main extends Phaser.Scene {
 
 
 }//fin de la clase main
-
-let config = {
-  type: Phaser.AUTO,
-  width: 1200,
-  height: 720,
-  scene: Main,
-  title: 'Interactivas - Game',
-  pixelArt: false,
-  physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { y: 2000 },
-      debug: true
-    }
-  }
-
-
-}
-
-
-
-
-//create game and pass config
-
-let game = new Phaser.Game(config);

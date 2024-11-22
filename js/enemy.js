@@ -21,10 +21,10 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.enemyCollide=false;
         // Dirección de movimiento
         this.direction = 1; // 1 = derecha, -1 = izquierda
-        this.speed = 100;  // Velocidad del movimiento
+        this.speed = 400;  // Velocidad del movimiento
         this.i = 0;
         // Límites de patrullaje pasados como parámetros
-
+        this.limit =this.generarNumeroAleatorio();
 
 
     }
@@ -32,7 +32,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     update() {
         this.i++;
-        if (this.i % 150 === 0) {
+        if (this.i % this.limit === 0) {
             this.direction = this.direction * -1;
         }
         this.body.setVelocityX(this.direction * this.speed)
@@ -54,7 +54,8 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.body.touching.up) {
 
             this.processed = true; // Marca al enemigo como procesado    
-            this.scene.score += 50; // Corrige aquí, usando `this.scene`            
+            this.scene.score += 50; // Corrige aquí, usando `this.scene`    
+            this.scene.scoreText.tintText(' #deff62  ', 1000);        
             this.destroyEnemy();
         }
 
@@ -68,6 +69,10 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     destroyEnemy() {
         // Incrementa el puntaje
         this.destroy(); // Destruye el enemigo
+    }
+
+    generarNumeroAleatorio() {
+        return Math.floor(Math.random() * (250 - 100 + 1)) + 100;
     }
 
 }
