@@ -11,7 +11,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
 
         this.body.allowGravity = true;
-        this.body.setSize(30, 160);
+        this.body.setSize(30, 151);
         this.body.setOffset(30, 0);
          this.scene = scene;
         // Inicializamos las animaciones para este jugador

@@ -18,7 +18,7 @@ export default class Main extends Phaser.Scene {
     this.winText = null;
     this.lives = []; // Array para guardar los sprites de las vidas
     this.collisionManager = null;
-    this.invetoryX=20;
+    this.invetoryX = 20;
 
   }
 
@@ -35,6 +35,7 @@ export default class Main extends Phaser.Scene {
     this.load.image('red-key', './game_assets/red-key.png')
     this.load.image('blue-key', './game_assets/blue-key.png')
     this.load.image('yellow-key', './game_assets/yellow-key.png')
+    this.load.image('pause boton', './game_assets/Boton Pausa.png')
 
     this.load.spritesheet('idle', './game_assets/idle-small.png', {
       frameWidth: 78,
@@ -77,10 +78,11 @@ export default class Main extends Phaser.Scene {
 
     this.physics.add.collider([this.Ariene, this.enemies], this.platforms)
     this.cameras.main.startFollow(this.Ariene, true, 0.1, 0);
-    this.cameras.main.setBounds(0, 0, this.bg.width / 1.75, this.bg.height / 1.75);
+    this.cameras.main.setBounds(0, 0, this.bg.width / 1, this.bg.height / 1);
 
     this.createText();
     this.createLives();
+    this.createPauseButton();
 
 
 
@@ -110,20 +112,20 @@ export default class Main extends Phaser.Scene {
 
 
     this.levelData.PowerUps.forEach((item) => {
-      if (item.type == 1) { 
+      if (item.type == 1) {
         let collectible = new Collectible(this, item.x, item.y, item.key, this.Ariene, item.type);
         this.add.existing(collectible, true);
 
       }
 
-      if (item.type == 2) { 
+      if (item.type == 2) {
         let collectible = new Collectible(this, item.x, item.y, item.key, this.Ariene, item.type);
         this.add.existing(collectible, true);
       }
-      
+
 
       //enable physics
-      
+
       //play burning animatio
 
     });
@@ -135,7 +137,7 @@ export default class Main extends Phaser.Scene {
       let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.leftLimit, item.rightLimit);  // Crear una instancia de Enemy
       this.physics.add.overlap(this.Ariene, enemy, (player, enemy) => this.collisionManager.hitPlayer(player, enemy), null, this);
       this.enemies.add(enemy);  // Añadir el enemigo al grupo de enemigos
-     
+
 
     });
   }
@@ -145,19 +147,38 @@ export default class Main extends Phaser.Scene {
     this.scoreText = new Text(this, 'Puntaje', 10, 10);
     this.scoreText.setDynamicValue(this.score);
 
-    this.gameOverText = new Text(this, 'Game Over',  0, 0);
+    this.gameOverText = new Text(this, 'Game Over', 500, 150);
     this.gameOverText.setVisible(false);
     this.gameOverText.setFontSize('64px');
-    this.gameOverText.centerText();
 
-    this.winText = new Text(this, '¡Ganaste!',  0, 0);
+    this.winText = new Text(this, '¡Ganaste!', 500, 150);
     this.winText.setVisible(false);
     this.winText.setColor('#d2ff2d');
     this.winText.setFontSize('64px');
-    this.winText.centerText();
 
   }
 
+  createPauseButton() {
+    const pauseButton = this.add.image(1100, 50, 'pause boton').setScale(0.8);
+    pauseButton.setScrollFactor(0); // Hacer que el corazón sea estático
+    pauseButton.setInteractive();
+
+
+    pauseButton.on('pointerover', () => {
+      pauseButton.setScale(1);
+
+    });
+
+    pauseButton.on('pointerout', () => {
+      pauseButton.setScale(0.8); // Restaurar el tamaño original
+    });
+
+
+    pauseButton.on('pointerdown', () => {
+      this.time.delayedCall(100, () => pauseButton.setScale(1));
+      this.scene.pause();
+    });
+  }
   createLives() {
     const livesCount = 3; // Cantidad de vidas
     const startX = 190; // Posición inicial (ajústalo según el tamaño de tu juego)
@@ -172,8 +193,8 @@ export default class Main extends Phaser.Scene {
 
   loseLife() {
     if (this.lives.length > 0) {
-      const lostHeart = this.lives.pop(); 
-      lostHeart.destroy(); 
+      const lostHeart = this.lives.pop();
+      lostHeart.destroy();
     }
     if (this.lives.length === 0) {
       this.gameOver();
@@ -182,47 +203,47 @@ export default class Main extends Phaser.Scene {
   }
 
   updateScoreDisplay() {
-     this.scoreText.updateValue(this.score);
+    this.scoreText.updateValue(this.score);
   }
 
-   gameOver(){
+  gameOver() {
     this.physics.pause();
     // Mostrar un texto de "Game Over"
     this.gameOverText.setVisible(true);
     this.input.keyboard.enabled = false;
 
     this.time.delayedCall(3000, () => {
-         this.scene.restart(); // Reinicia la escena después de 3 segundos
-         this.input.keyboard.enabled = true;
-         this.score = 0;
-         this.invetoryX=20;
+      this.scene.restart(); // Reinicia la escena después de 3 segundos
+      this.input.keyboard.enabled = true;
+      this.score = 0;
+      this.invetoryX = 20;
 
 
     });
-}
+  }
 
 
-winGame() {
-  // Pausa el juego
-  this.physics.pause();
+  winGame() {
+    // Pausa el juego
+    this.physics.pause();
 
-  // Mostrar mensaje de victoria
-  this.winText.setVisible(true);
-  // Reinicia el juego después de un tiempo o realiza otras acciones
-  this.time.delayedCall(3000, () => {
-    this.scene.restart(); // Reinicia la escena
-    this.score = 0; // Reinicia el puntaje si es necesario
-    this.invetoryX=20;
-  });
+    // Mostrar mensaje de victoria
+    this.winText.setVisible(true);
+    // Reinicia el juego después de un tiempo o realiza otras acciones
+    this.time.delayedCall(3000, () => {
+      this.scene.restart(); // Reinicia la escena
+      this.score = 0; // Reinicia el puntaje si es necesario
+      this.invetoryX = 20;
+    });
 
-}
+  }
 
 
   update() {
-   if (this.enemies.getLength() === 0) {
-     this.winGame();
-   }
-   
+    if (this.enemies.getLength() === 0) {
+      this.winGame();
+    }
+
     this.enemies.children.iterate((enemy) => {
       // Puedes agregar lógica adicional para cada enemigo, si es necesario
       if (enemy) { // Asegúrate de que "enemy" no sea undefined
