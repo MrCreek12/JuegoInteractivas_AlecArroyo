@@ -1,21 +1,19 @@
 import Text from './Text.js';
-export default class Menu extends Phaser.Scene {
+export default class Pause extends Phaser.Scene {
     constructor() {
-        super({ key: 'Menu' });
-        this.menuX = 700;
+        super({ key: 'Pause' });
+        this.menuX = 500;
         this.menuY = 220;
     }
 
     preload() {
         // Carga la imagen del fondo
         this.load.image('mainMenuBg', './game_assets/Menu-Image-s.png');
-        this.load.image('logo', './imgs/MainLogo.png');
     }
 
     create() {
         // Agrega la imagen de fondo
         const miImagen = this.add.image(0, 0, 'mainMenuBg').setOrigin(0.0);
-        this.add.image(330, 230, 'logo').setScale(0.7);
 
         this.tweens.add({
             targets: miImagen,
@@ -30,20 +28,21 @@ export default class Menu extends Phaser.Scene {
         // Título del menú
 
         // Botón "Jugar"
-        const playBtn = new Text(this, 'Jugar', this.menuX, this.menuY);
+        const playBtn = new Text(this, 'Reanudar', this.menuX, this.menuY);
         playBtn.createButton();
 
         const levelsBtn = new Text(this, 'Niveles', this.menuX, this.menuY + 100);
         levelsBtn.createButton();
 
-        const backBtn = new Text(this, 'Regresar', this.menuX, this.menuY + 200);
+        const backBtn = new Text(this, 'Volver al menu principal', this.menuX, this.menuY + 200);
         backBtn.createButton();
         // Botón "Niveles"
 
 
         // Eventos de los botones
         playBtn.getButton().on('pointerdown', () => {
-            this.scene.start('Main'); // Inicia la escena principal
+            this.scene.stop(); // Detiene la escena de pausa
+            this.scene.resume('Main'); // Reanuda la escena principal
         });
 
         levelsBtn.getButton().on('pointerdown', () => {
@@ -51,7 +50,10 @@ export default class Menu extends Phaser.Scene {
         });
 
         backBtn.getButton().on('pointerdown', () => {
-            window.location.href = './index.html'; // Cambia esto por la URL o archivo HTML deseado
+            this.scene.stop('Main');
+            
+            this.scene.start('Menu'); // Inicia la escena principal
+
         });
     }
 }

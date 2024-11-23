@@ -14,6 +14,8 @@ export default class Main extends Phaser.Scene {
     this.Ariene = null
     this.score = 0;  // Variable de puntaje, comienza en 0
     this.scoreText = null;  // Definir la propiedad de scoreText
+    this.countText = 4;  // Definir la propiedad de scoreText
+    this.count = 0;  // Definir la propiedad de scoreText
     this.gameOvertext = null;
     this.winText = null;
     this.lives = []; // Array para guardar los sprites de las vidas
@@ -26,7 +28,10 @@ export default class Main extends Phaser.Scene {
 
   preload() {
     this.load.image('background', './game_assets/Background.png')
-    this.load.image('frontBackground', './game_assets/FrontalBackground.png')
+    this.load.image('background2', './game_assets/2.png')
+    this.load.image('frontBackground', './game_assets/FrontalBackground-1-min.png')
+    this.load.image('frontBackground2', './game_assets/FrontalBackground-2-min.png')
+
     this.load.image('MainGround', './game_assets/Main Ground.png')
     this.load.image('grPlatform', './game_assets/1x/Ground Platform.png')
     this.load.image('airPlatform', 'game_assets/1x/Air Platform 1.png')
@@ -35,7 +40,9 @@ export default class Main extends Phaser.Scene {
     this.load.image('red-key', './game_assets/red-key.png')
     this.load.image('blue-key', './game_assets/blue-key.png')
     this.load.image('yellow-key', './game_assets/yellow-key.png')
-    this.load.image('pause boton', './game_assets/Boton Pausa.png')
+    this.load.image('icon', './game_assets/jibble icon.png')
+
+      / this.load.image('pause boton', './game_assets/Boton Pausa.png')
 
     this.load.spritesheet('idle', './game_assets/idle-small.png', {
       frameWidth: 78,
@@ -62,7 +69,8 @@ export default class Main extends Phaser.Scene {
     this.levelData = this.cache.json.get('levelData');
 
     this.bg = new Background(this, 0, 0, 'background')
-
+    this.bg2 = new Background(this, 1222, 0, 'background2')
+    this.bg3 = new Background(this, 2232, 0, 'background2')
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.Ariene = new Player(this, this.levelData.player.x, this.levelData.player.y, 'idle', this.cursors)
@@ -70,20 +78,22 @@ export default class Main extends Phaser.Scene {
     this.createPlatforms();
     this.createCollectible();
 
-
-
-    this.fbg = new Background(this, 0, 0, 'frontBackground')
-
     this.createEnemies();
-
+    this.fbg2 = new Background(this, 2000, 0, 'frontBackground2')
+    this.fbg = new Background(this, 0, 0, 'frontBackground')
+    this.icon = new Background(this, 650, 10, 'icon')
+    this.icon.setScrollFactor(0);
+    this.icon.setAlpha(0.5);
+    
     this.physics.add.collider([this.Ariene, this.enemies], this.platforms)
     this.cameras.main.startFollow(this.Ariene, true, 0.1, 0);
-    this.cameras.main.setBounds(0, 0, this.bg.width / 1, this.bg.height / 1);
+    this.cameras.main.setBounds(0, 0, 3000, this.bg.height / 1);
 
     this.createText();
     this.createLives();
     this.createPauseButton();
 
+    
 
 
   }
@@ -134,9 +144,19 @@ export default class Main extends Phaser.Scene {
   createEnemies() {
     // Crear enemigos a partir de los datos de nivel
     this.levelData.enemy.forEach((item) => {
-      let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.leftLimit, item.rightLimit);  // Crear una instancia de Enemy
-      this.physics.add.overlap(this.Ariene, enemy, (player, enemy) => this.collisionManager.hitPlayer(player, enemy), null, this);
-      this.enemies.add(enemy);  // Añadir el enemigo al grupo de enemigos
+      if (item.type == 1) {
+        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.speed, item.type);  // Crear una instancia de Enemy
+        this.physics.add.collider(this.Ariene, enemy, (player, enemy) => this.collisionManager.hitPlayer(player, enemy), null, this);
+        this.enemies.add(enemy);  // Añadir el enemigo al grupo de enemigos
+      }
+      
+      if (item.type == 2) {
+        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.speed, item.type);  // Crear una instancia de Enemy
+        this.physics.add.collider(this.Ariene, enemy, (player, enemy) => this.collisionManager.hitPlayer(player, enemy), null, this);
+        this.enemies.add(enemy);  // Añadir el enemigo al grupo de enemigos
+      }
+
+     
 
 
     });
@@ -145,11 +165,16 @@ export default class Main extends Phaser.Scene {
 
   createText() {
     this.scoreText = new Text(this, 'Puntaje', 10, 10);
-    this.scoreText.setDynamicValue(this.score);
+    this.scoreText.setDynamicValue(this.score, 'Puntaje:');
 
     this.gameOverText = new Text(this, 'Game Over', 500, 150);
     this.gameOverText.setVisible(false);
     this.gameOverText.setFontSize('64px');
+
+    this.countText = new Text(this, '/4',540, 10);
+    this.countText.setFontSize('40px');
+    this.countText.setDynamicValueInverse(this.count, '0');
+    
 
     this.winText = new Text(this, '¡Ganaste!', 500, 150);
     this.winText.setVisible(false);
@@ -175,8 +200,10 @@ export default class Main extends Phaser.Scene {
 
 
     pauseButton.on('pointerdown', () => {
-      this.time.delayedCall(100, () => pauseButton.setScale(1));
       this.scene.pause();
+      this.scene.launch('Pause'); // Lanza la escena de pausa
+     
+      
     });
   }
   createLives() {
@@ -203,7 +230,8 @@ export default class Main extends Phaser.Scene {
   }
 
   updateScoreDisplay() {
-    this.scoreText.updateValue(this.score);
+    this.scoreText.updateValue(this.score, 'Puntaje:');
+    this.countText.updateValueInverse(this.count, '/4');
   }
 
   gameOver() {
@@ -216,6 +244,7 @@ export default class Main extends Phaser.Scene {
       this.scene.restart(); // Reinicia la escena después de 3 segundos
       this.input.keyboard.enabled = true;
       this.score = 0;
+      this.count = 0;
       this.invetoryX = 20;
 
 
@@ -232,6 +261,7 @@ export default class Main extends Phaser.Scene {
     // Reinicia el juego después de un tiempo o realiza otras acciones
     this.time.delayedCall(3000, () => {
       this.scene.restart(); // Reinicia la escena
+      this.count = 0;
       this.score = 0; // Reinicia el puntaje si es necesario
       this.invetoryX = 20;
     });
@@ -252,6 +282,9 @@ export default class Main extends Phaser.Scene {
     });
     this.Ariene.update(this.cursors)
     this.updateScoreDisplay()
+    
+    console.log(`Coordenadas: X=${this.Ariene.getCoordinatesX()}, Y=${this.Ariene.getCoordinatesY()}`);
+
   }
 
 

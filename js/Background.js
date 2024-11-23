@@ -10,5 +10,4 @@ export default class Background extends Phaser.GameObjects.Sprite {
     }
 
 
-
 }

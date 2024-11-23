@@ -22,6 +22,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     }
 
+    getCoordinatesX() {
+        return this.x;
+    }
+
+    getCoordinatesY() {
+        return this.y;
+    }
+
+
     update(cursors) {
         // Verifica si la tecla derecha está presionada
         this.setVelocityX(0);

@@ -10,9 +10,15 @@ export default class TextManager {
   }
 
   // Método para actualizar el valor dinámico
-  updateValue(newValue) {
+  updateValue(newValue,text) {
     this.dynamicValue = newValue;
-    this.textObject.setText(`Puntaje: ${this.dynamicValue}`);
+    this.textObject.setText(`${text} ${this.dynamicValue}`);
+    
+  }
+
+  updateValueInverse(newValue,text) {
+    this.dynamicValue = newValue;
+    this.textObject.setText(` ${this.dynamicValue} ${text}`);
     
   }
 
@@ -23,9 +29,14 @@ export default class TextManager {
   setFontSize(fontSize) {
     this.textObject.setStyle({ fontSize: fontSize });
   }
-  setDynamicValue(dynamicValue) {
+  setDynamicValue(dynamicValue,text) {
     this.dynamicValue = dynamicValue;
-    this.textObject.setText(`Puntaje: ${this.dynamicValue}`);
+    this.textObject.setText(`${text} ${this.dynamicValue}`);
+  }
+
+  setDynamicValueInverse(dynamicValue,text) {
+    this.dynamicValue = dynamicValue;
+    this.textObject.setText(` ${this.dynamicValue} ${text}`);
   }
   setColor(color) {
     this.textObject.setStyle({ fill: color });
