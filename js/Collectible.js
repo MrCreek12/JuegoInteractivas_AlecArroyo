@@ -1,5 +1,5 @@
 export default class Collectible extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, key, player,item) {
+    constructor(scene, x, y, key, player,item,scoreValue) {
       // Llama al constructor de la clase base Phaser.GameObjects.Sprite
       super(scene, x, y, key);
       
@@ -9,6 +9,7 @@ export default class Collectible extends Phaser.GameObjects.Sprite {
       // Agrega el sprite a la escena
       scene.add.existing(this);
       this.item = item;
+      this.scoreValue = scoreValue;
       // Habilitar la física para el objeto
       scene.physics.add.existing(this);
       
@@ -26,7 +27,7 @@ export default class Collectible extends Phaser.GameObjects.Sprite {
     collect() {
       if (this.item === 1) {
         this.player.invulnerable = true;
-        this.scene.score += 10;  // Incrementa el puntaje en 10
+        this.scene.score += this.scoreValue;  // Incrementa el puntaje en 10
         this.scene.scoreText.tintText('#4fff4c ', 1000);
         // Actualiza la visualización del puntaje
         this.scene.updateScoreDisplay();

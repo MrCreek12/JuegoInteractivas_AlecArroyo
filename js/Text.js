@@ -10,16 +10,16 @@ export default class TextManager {
   }
 
   // Método para actualizar el valor dinámico
-  updateValue(newValue,text) {
+  updateValue(newValue, text) {
     this.dynamicValue = newValue;
     this.textObject.setText(`${text} ${this.dynamicValue}`);
-    
+
   }
 
-  updateValueInverse(newValue,text) {
+  updateValueInverse(newValue, text) {
     this.dynamicValue = newValue;
     this.textObject.setText(` ${this.dynamicValue} ${text}`);
-    
+
   }
 
   setVisible(visible) {
@@ -29,12 +29,16 @@ export default class TextManager {
   setFontSize(fontSize) {
     this.textObject.setStyle({ fontSize: fontSize });
   }
-  setDynamicValue(dynamicValue,text) {
+  setDynamicValue(dynamicValue, text) {
     this.dynamicValue = dynamicValue;
     this.textObject.setText(`${text} ${this.dynamicValue}`);
   }
 
-  setDynamicValueInverse(dynamicValue,text) {
+  setAlpha(alpha) {
+    this.textObject.setAlpha(alpha);
+  }
+
+  setDynamicValueInverse(dynamicValue, text) {
     this.dynamicValue = dynamicValue;
     this.textObject.setText(` ${this.dynamicValue} ${text}`);
   }
@@ -42,15 +46,19 @@ export default class TextManager {
     this.textObject.setStyle({ fill: color });
   }
 
-   tintText(color, duration) {
+  tintText(color, duration) {
     // Cambia el color del texto al especificado
     this.textObject.setColor(color);
 
     // Después del tiempo especificado, vuelve a ponerlo blanco
     this.scene.time.delayedCall(duration, () => {
-        this.textObject.setColor('#ffffff');
+      this.textObject.setColor('#ffffff');
     });
-}
+  }
+
+  setScrollFactor(scrollFactor) {
+    this.textObject.setScrollFactor(scrollFactor);
+  }
 
   centerText() {
     // Obtiene las coordenadas centrales de la cámara principal
@@ -66,15 +74,23 @@ export default class TextManager {
   createButton() {
     // this.textObject.setStyle({ fill: color });
     this.textObject.setStyle({ padding: { x: 90, y: 30 } });
-    
+
     // this.textObject.setStyle({ backgroundColor: '#3fb3d5 ' });
     this.textObject.setStyle({ color: '#fff' });
- 
+
     this.textObject.setInteractive();
+
+    this.textObject.on('pointerover', () => {
+      this.textObject.setStyle({ color: '#fff886 ' });
+    });
+
+    this.textObject.on('pointerout', () => {
+      this.textObject.setStyle({ color: '#fff' });
+    });
 
   }
 
-  getButton(){
+  getButton() {
     return this.textObject;
   }
 

@@ -6,22 +6,35 @@ import Enemy from "./enemy.js";
 import CollisionManager from "./CollisionManajer.js";
 import Text from "./Text.js";
 
-export default class Main extends Phaser.Scene {
-  constructor() {
-    super({ key: 'Main' });
+export default class Level extends Phaser.Scene {
+  constructor(key, cantVidas,  itemScore, enemyScore, difficulty, jsonRoute,sceneNumber) {
+    super({ key: key });
     this.bg = null;
     this.fbg = null;
     this.Ariene = null
+
+
     this.score = 0;  // Variable de puntaje, comienza en 0
-    this.scoreText = null;  // Definir la propiedad de scoreText
-    this.countText = 4;  // Definir la propiedad de scoreText
     this.count = 0;  // Definir la propiedad de scoreText
+
+    this.cantVidas = cantVidas;
+    this.totalEnemigos = null;
+
+    this.itemScore = itemScore;
+    this.enemyScore = enemyScore;
+    this.jsonRoute = jsonRoute
+    this.sceneNumber = sceneNumber
+
+
+    this.scoreText = null;  // Definir la propiedad de scoreText
+
     this.gameOvertext = null;
     this.winText = null;
     this.lives = []; // Array para guardar los sprites de las vidas
+
     this.collisionManager = null;
     this.invetoryX = 20;
-
+    this.difficulty = difficulty;
   }
 
 
@@ -58,15 +71,32 @@ export default class Main extends Phaser.Scene {
     })
 
     this.load.image('enemy-idle', './game_assets/enemy-image.png');
-
-    this.load.json('levelData', './data/levelData.json');
+   //Permite que los datos no se sobreescriban
+    this.load.json('level1-data', './data/levelData.json');
+    this.load.json('level2-data', './data/levelData2.json');
   };
 
 
   create() {
+    this.score = 0;  // Variable de puntaje, comienza en 0
+    this.count = 0;  // Definir la propiedad de scoreText
+    this.lives = []; // Array para guardar los sprites de las vidas
+    this.input.keyboard.enabled = true;
+
+
     this.collisionManager = new CollisionManager(this);
     this.enemies = this.physics.add.group();
-    this.levelData = this.cache.json.get('levelData');
+    
+      // Acceder al JSON utilizando la clave basada en `this.key`
+      if (this.sceneNumber === 1) {
+        this.levelData = this.cache.json.get('level1-data');
+    } else if (this.sceneNumber === 2) {
+        this.levelData = this.cache.json.get('level2-data');
+    } else {
+        console.error(`No se reconoce el número de escena: ${this.sceneNumber}`);
+        return;
+    }
+
 
     this.bg = new Background(this, 0, 0, 'background')
     this.bg2 = new Background(this, 1222, 0, 'background2')
@@ -84,7 +114,7 @@ export default class Main extends Phaser.Scene {
     this.icon = new Background(this, 650, 10, 'icon')
     this.icon.setScrollFactor(0);
     this.icon.setAlpha(0.5);
-    
+
     this.physics.add.collider([this.Ariene, this.enemies], this.platforms)
     this.cameras.main.startFollow(this.Ariene, true, 0.1, 0);
     this.cameras.main.setBounds(0, 0, 3000, this.bg.height / 1);
@@ -93,7 +123,7 @@ export default class Main extends Phaser.Scene {
     this.createLives();
     this.createPauseButton();
 
-    
+
 
 
   }
@@ -123,13 +153,13 @@ export default class Main extends Phaser.Scene {
 
     this.levelData.PowerUps.forEach((item) => {
       if (item.type == 1) {
-        let collectible = new Collectible(this, item.x, item.y, item.key, this.Ariene, item.type);
+        let collectible = new Collectible(this, item.x, item.y, item.key, this.Ariene, item.type, this.itemScore);
         this.add.existing(collectible, true);
 
       }
 
       if (item.type == 2) {
-        let collectible = new Collectible(this, item.x, item.y, item.key, this.Ariene, item.type);
+        let collectible = new Collectible(this, item.x, item.y, item.key, this.Ariene, item.type, this.itemScore);
         this.add.existing(collectible, true);
       }
 
@@ -145,25 +175,32 @@ export default class Main extends Phaser.Scene {
     // Crear enemigos a partir de los datos de nivel
     this.levelData.enemy.forEach((item) => {
       if (item.type == 1) {
-        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.speed, item.type);  // Crear una instancia de Enemy
-        this.physics.add.collider(this.Ariene, enemy, (player, enemy) => this.collisionManager.hitPlayer(player, enemy), null, this);
-        this.enemies.add(enemy);  // Añadir el enemigo al grupo de enemigos
-      }
-      
-      if (item.type == 2) {
-        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.speed, item.type);  // Crear una instancia de Enemy
+        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.speed, item.type, this.enemyScore, this.difficulty);  // Crear una instancia de Enemy
         this.physics.add.collider(this.Ariene, enemy, (player, enemy) => this.collisionManager.hitPlayer(player, enemy), null, this);
         this.enemies.add(enemy);  // Añadir el enemigo al grupo de enemigos
       }
 
-     
+      if (item.type == 2) {
+        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.speed, item.type, this.enemyScore, this.difficulty);  // Crear una instancia de Enemy
+        this.physics.add.collider(this.Ariene, enemy, (player, enemy) => this.collisionManager.hitPlayer(player, enemy), null, this);
+        this.enemies.add(enemy);  // Añadir el enemigo al grupo de enemigos
+      }
+
+
 
 
     });
+
+    this.totalEnemigos = '/' + this.enemies.getLength();
   }
 
 
   createText() {
+    this.levelText = new Text(this, 'Nivel'+' '+this.sceneNumber, 500, 200);
+    this.levelText.setAlpha(0.3);
+    this.levelText.setFontSize('70px');
+    this.levelText.setScrollFactor(1);
+
     this.scoreText = new Text(this, 'Puntaje', 10, 10);
     this.scoreText.setDynamicValue(this.score, 'Puntaje:');
 
@@ -171,10 +208,10 @@ export default class Main extends Phaser.Scene {
     this.gameOverText.setVisible(false);
     this.gameOverText.setFontSize('64px');
 
-    this.countText = new Text(this, '/4',540, 10);
+    this.countText = new Text(this, '/2', 540, 10);
     this.countText.setFontSize('40px');
     this.countText.setDynamicValueInverse(this.count, '0');
-    
+
 
     this.winText = new Text(this, '¡Ganaste!', 500, 150);
     this.winText.setVisible(false);
@@ -200,14 +237,14 @@ export default class Main extends Phaser.Scene {
 
 
     pauseButton.on('pointerdown', () => {
-      this.scene.pause();
-      this.scene.launch('Pause'); // Lanza la escena de pausa
-     
-      
+      this.scene.pause(this.scene.key);
+      this.scene.launch('Pause', { previousScene: this.scene.key }); // Lanza la escena de pausa
+
+
     });
   }
   createLives() {
-    const livesCount = 3; // Cantidad de vidas
+    const livesCount = this.cantVidas; // Cantidad de vidas
     const startX = 190; // Posición inicial (ajústalo según el tamaño de tu juego)
     const startY = 100; // Posición en Y
 
@@ -231,7 +268,8 @@ export default class Main extends Phaser.Scene {
 
   updateScoreDisplay() {
     this.scoreText.updateValue(this.score, 'Puntaje:');
-    this.countText.updateValueInverse(this.count, '/4');
+    
+    this.countText.updateValueInverse(this.count, this.totalEnemigos);
   }
 
   gameOver() {
@@ -260,10 +298,13 @@ export default class Main extends Phaser.Scene {
     this.winText.setVisible(true);
     // Reinicia el juego después de un tiempo o realiza otras acciones
     this.time.delayedCall(3000, () => {
-      this.scene.restart(); // Reinicia la escena
-      this.count = 0;
-      this.score = 0; // Reinicia el puntaje si es necesario
-      this.invetoryX = 20;
+      let a=this.sceneNumber;
+      let b=1;
+      this.scene.start('Level'+(a+b));
+      // this.scene.restart(); // Reinicia la escena
+      // this.count = 0;
+      // this.score = 0; // Reinicia el puntaje si es necesario
+      // this.invetoryX = 20;
     });
 
   }
@@ -282,7 +323,7 @@ export default class Main extends Phaser.Scene {
     });
     this.Ariene.update(this.cursors)
     this.updateScoreDisplay()
-    
+
     console.log(`Coordenadas: X=${this.Ariene.getCoordinatesX()}, Y=${this.Ariene.getCoordinatesY()}`);
 
   }

@@ -4,6 +4,8 @@ export default class Pause extends Phaser.Scene {
         super({ key: 'Pause' });
         this.menuX = 500;
         this.menuY = 220;
+        this.previousScene = null; // Variable para almacenar la escena previa
+
     }
 
     preload() {
@@ -11,7 +13,11 @@ export default class Pause extends Phaser.Scene {
         this.load.image('mainMenuBg', './game_assets/Menu-Image-s.png');
     }
 
-    create() {
+    create(data) {
+
+        if (data.previousScene) {
+            this.previousScene = data.previousScene;
+        }
         // Agrega la imagen de fondo
         const miImagen = this.add.image(0, 0, 'mainMenuBg').setOrigin(0.0);
 
@@ -41,8 +47,12 @@ export default class Pause extends Phaser.Scene {
 
         // Eventos de los botones
         playBtn.getButton().on('pointerdown', () => {
-            this.scene.stop(); // Detiene la escena de pausa
-            this.scene.resume('Main'); // Reanuda la escena principal
+            if (this.previousScene) {
+                this.scene.stop(); // Detiene la escena de pausa
+                this.scene.resume(this.previousScene); // Reanuda la escena previa
+            } else {
+                console.error('No se encontró la escena previa para reanudar.');
+            }
         });
 
         levelsBtn.getButton().on('pointerdown', () => {
@@ -50,9 +60,36 @@ export default class Pause extends Phaser.Scene {
         });
 
         backBtn.getButton().on('pointerdown', () => {
-            this.scene.stop('Main');
+            backBtn.setVisible(false);
+            playBtn.setVisible(false);
+            levelsBtn.setVisible(false);
             
-            this.scene.start('Menu'); // Inicia la escena principal
+            const confText = new Text(this, '¿Desea salir del juego? El progreso se perderá', this.menuX-200, this.menuY );
+
+            const siBtn = new Text(this, 'Si', this.menuX+50, this.menuY+100 );
+            siBtn.createButton();
+
+            siBtn.getButton().on('pointerdown', () => {
+                  if (this.previousScene) {
+                this.scene.stop(this.previousScene);
+                this.scene.start('Menu'); // Reanuda la escena previa
+            } else {
+                console.error('No se encontró');
+            }
+            });
+
+            const noBtn = new Text(this, 'No', this.menuX+150, this.menuY+100);
+            noBtn.createButton();
+            
+            noBtn.getButton().on('pointerdown', () => {
+                backBtn.setVisible(true);
+                playBtn.setVisible(true);
+                levelsBtn.setVisible(true);
+                confText.setVisible(false);
+                siBtn.setVisible(false);
+                noBtn.setVisible(false);
+            })
+          
 
         });
     }

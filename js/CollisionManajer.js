@@ -14,7 +14,7 @@ export default class CollisionManager {
 
             player.setTint(0xff0000);
 
-            this.scene.time.delayedCall(500, () => { // 2 segundos de invulnerabilidad
+            this.scene.time.delayedCall(200, () => { // 2 segundos de invulnerabilidad
                 player.body.touching.down = true;
                 player.collide = false;
                 player.clearTint();

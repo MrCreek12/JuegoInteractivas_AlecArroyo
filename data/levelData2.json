@@ -73,17 +73,12 @@
          "y": 441,
          "type": 2,
          "key": "blue-key"
-      },
-      {
-         "x": 200,
-         "y": 650,
-         "type": 2,
-         "key": "yellow-key"
       }
+  
    ],
    "platforms": [
       {
-         "x": 880,
+         "x": 280,
          "y": 580,
          "tiles": 1,
          "key": "grPlatform"

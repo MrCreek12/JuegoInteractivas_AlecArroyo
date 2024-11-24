@@ -43,7 +43,7 @@ export default class Menu extends Phaser.Scene {
 
         // Eventos de los botones
         playBtn.getButton().on('pointerdown', () => {
-            this.scene.start('Main'); // Inicia la escena principal
+            this.scene.start('Level1'); // Inicia la escena principal
         });
 
         levelsBtn.getButton().on('pointerdown', () => {
@@ -56,5 +56,5 @@ export default class Menu extends Phaser.Scene {
     }
 }
 
-// Configuración del juego
+// Menu.js
 
