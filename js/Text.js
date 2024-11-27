@@ -26,6 +26,10 @@ export default class TextManager {
     this.textObject.setVisible(visible);
   }
 
+  setLocation(x, y) {
+    this.textObject.setPosition(x, y);
+  }
+
   setFontSize(fontSize) {
     this.textObject.setStyle({ fontSize: fontSize });
   }

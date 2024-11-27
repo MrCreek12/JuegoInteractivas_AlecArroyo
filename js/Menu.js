@@ -1,4 +1,5 @@
 import Text from './Text.js';
+import Level from './Level.Js';
 export default class Menu extends Phaser.Scene {
     constructor() {
         super({ key: 'Menu' });
@@ -47,6 +48,22 @@ export default class Menu extends Phaser.Scene {
         });
 
         levelsBtn.getButton().on('pointerdown', () => {
+
+            playBtn.setVisible(false);
+            levelsBtn.setVisible(false);
+
+
+            let levelCount =  this.scene.manager.scenes.filter(scene => scene instanceof Level).length;
+
+            for (let i = 0; i < levelCount; i++) {
+                const level = new Text(this, 'Nivel ' + (i + 1), this.menuX, this.menuY + 100 * i);
+                level.createButton();
+                level.getButton().on('pointerdown', () => {
+                    this.scene.start('Level' + (i + 1)); // Inicia la escena correspondiente
+                });
+                backBtn.setLocation(this.menuX, this.menuY + 100 * (i + 1));
+            }
+
             console.log('Niveles seleccionados'); // Puedes lanzar otra escena aquí
         });
 

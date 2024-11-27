@@ -1,4 +1,5 @@
 import Text from './Text.js';
+import Level from './Level.Js';
 export default class Pause extends Phaser.Scene {
     constructor() {
         super({ key: 'Pause' });
@@ -63,24 +64,36 @@ export default class Pause extends Phaser.Scene {
             backBtn.setVisible(false);
             playBtn.setVisible(false);
             levelsBtn.setVisible(false);
-            
-            const confText = new Text(this, '¿Desea salir del juego? El progreso se perderá', this.menuX-200, this.menuY );
 
-            const siBtn = new Text(this, 'Si', this.menuX+50, this.menuY+100 );
+            const confText = new Text(this, '¿Desea salir del juego? El progreso se perderá', this.menuX - 200, this.menuY);
+
+            const siBtn = new Text(this, 'Si', this.menuX + 50, this.menuY + 100);
             siBtn.createButton();
 
             siBtn.getButton().on('pointerdown', () => {
-                  if (this.previousScene) {
-                this.scene.stop(this.previousScene);
-                this.scene.start('Menu'); // Reanuda la escena previa
-            } else {
-                console.error('No se encontró');
-            }
+                // this.scene.get('Level1').setScore(0);   
+                if (this.previousScene) {
+                    
+                    this.scene.stop(this.previousScene);
+                    this.scene.start('Menu'); // Reanuda la escena previa
+
+                    let levelCount = this.scene.manager.scenes.filter(scene => scene instanceof Level).length;
+                    
+                    for (let i = 0; i < levelCount; i++) {
+                        const levelSceneKey = 'Level' + (i + 1); // Obtenemos el nombre de la escena
+                        this.scene.get(levelSceneKey).init(); // Reinicia la escena específica
+                        // Reubicar el botón de "atrás" debajo de cada nivel
+                    }
+
+
+                } else {
+                    console.error('No se encontró');
+                }
             });
 
-            const noBtn = new Text(this, 'No', this.menuX+150, this.menuY+100);
+            const noBtn = new Text(this, 'No', this.menuX + 150, this.menuY + 100);
             noBtn.createButton();
-            
+
             noBtn.getButton().on('pointerdown', () => {
                 backBtn.setVisible(true);
                 playBtn.setVisible(true);
@@ -89,7 +102,7 @@ export default class Pause extends Phaser.Scene {
                 siBtn.setVisible(false);
                 noBtn.setVisible(false);
             })
-          
+
 
         });
     }

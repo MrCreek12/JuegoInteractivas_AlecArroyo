@@ -7,7 +7,7 @@ import CollisionManager from "./CollisionManajer.js";
 import Text from "./Text.js";
 
 export default class Level extends Phaser.Scene {
-  constructor(key, cantVidas,  itemScore, enemyScore, difficulty, jsonRoute,sceneNumber) {
+  constructor(key, cantVidas, itemScore, enemyScore, difficulty, jsonRoute, sceneNumber, isLastLevel) {
     super({ key: key });
     this.bg = null;
     this.fbg = null;
@@ -15,6 +15,10 @@ export default class Level extends Phaser.Scene {
 
 
     this.score = 0;  // Variable de puntaje, comienza en 0
+    this.countBlueKeys= 0;
+    this.countRedKeys = 0;
+    this.countYellowKeys = 0;
+
     this.count = 0;  // Definir la propiedad de scoreText
 
     this.cantVidas = cantVidas;
@@ -35,6 +39,7 @@ export default class Level extends Phaser.Scene {
     this.collisionManager = null;
     this.invetoryX = 20;
     this.difficulty = difficulty;
+    this.isLastLevel = isLastLevel
   }
 
 
@@ -71,14 +76,26 @@ export default class Level extends Phaser.Scene {
     })
 
     this.load.image('enemy-idle', './game_assets/enemy-image.png');
-   //Permite que los datos no se sobreescriban
+    //Permite que los datos no se sobreescriban
     this.load.json('level1-data', './data/levelData.json');
     this.load.json('level2-data', './data/levelData2.json');
+    this.load.json('level3-data', './data/levelData3.json');
   };
+  
+  init() {
+    this.invetoryX = 20;
+    if (this.sceneNumber == 1) {
+      this.score = 0;
+      this.countBlueKeys = 0;
+      this.countRedKeys = 0;
+      this.countYellowKeys = 0;
+    }
+  }
 
 
   create() {
-    this.score = 0;  // Variable de puntaje, comienza en 0
+    // this.score = 0;
+
     this.count = 0;  // Definir la propiedad de scoreText
     this.lives = []; // Array para guardar los sprites de las vidas
     this.input.keyboard.enabled = true;
@@ -86,17 +103,8 @@ export default class Level extends Phaser.Scene {
 
     this.collisionManager = new CollisionManager(this);
     this.enemies = this.physics.add.group();
-    
-      // Acceder al JSON utilizando la clave basada en `this.key`
-      if (this.sceneNumber === 1) {
-        this.levelData = this.cache.json.get('level1-data');
-    } else if (this.sceneNumber === 2) {
-        this.levelData = this.cache.json.get('level2-data');
-    } else {
-        console.error(`No se reconoce el número de escena: ${this.sceneNumber}`);
-        return;
-    }
 
+    this.levelData = this.cache.json.get('level' + this.sceneNumber + '-data');
 
     this.bg = new Background(this, 0, 0, 'background')
     this.bg2 = new Background(this, 1222, 0, 'background2')
@@ -175,13 +183,13 @@ export default class Level extends Phaser.Scene {
     // Crear enemigos a partir de los datos de nivel
     this.levelData.enemy.forEach((item) => {
       if (item.type == 1) {
-        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.speed, item.type, this.enemyScore, this.difficulty);  // Crear una instancia de Enemy
+        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', 0, item.type, this.enemyScore, this.difficulty);  // Crear una instancia de Enemy
         this.physics.add.collider(this.Ariene, enemy, (player, enemy) => this.collisionManager.hitPlayer(player, enemy), null, this);
         this.enemies.add(enemy);  // Añadir el enemigo al grupo de enemigos
       }
 
       if (item.type == 2) {
-        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.speed, item.type, this.enemyScore, this.difficulty);  // Crear una instancia de Enemy
+        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', 0, item.type, this.enemyScore, this.difficulty);  // Crear una instancia de Enemy
         this.physics.add.collider(this.Ariene, enemy, (player, enemy) => this.collisionManager.hitPlayer(player, enemy), null, this);
         this.enemies.add(enemy);  // Añadir el enemigo al grupo de enemigos
       }
@@ -196,7 +204,7 @@ export default class Level extends Phaser.Scene {
 
 
   createText() {
-    this.levelText = new Text(this, 'Nivel'+' '+this.sceneNumber, 500, 200);
+    this.levelText = new Text(this, 'Nivel' + ' ' + this.sceneNumber, 500, 200);
     this.levelText.setAlpha(0.3);
     this.levelText.setFontSize('70px');
     this.levelText.setScrollFactor(1);
@@ -268,7 +276,7 @@ export default class Level extends Phaser.Scene {
 
   updateScoreDisplay() {
     this.scoreText.updateValue(this.score, 'Puntaje:');
-    
+
     this.countText.updateValueInverse(this.count, this.totalEnemigos);
   }
 
@@ -281,7 +289,14 @@ export default class Level extends Phaser.Scene {
     this.time.delayedCall(3000, () => {
       this.scene.restart(); // Reinicia la escena después de 3 segundos
       this.input.keyboard.enabled = true;
-      this.score = 0;
+      
+      if(this.sceneNumber == 1){
+
+        this.score = 0;
+      } else {
+        this.score = this.scene.get('Level' + (this.sceneNumber - 1)).getScore();
+      }
+        
       this.count = 0;
       this.invetoryX = 20;
 
@@ -293,20 +308,63 @@ export default class Level extends Phaser.Scene {
   winGame() {
     // Pausa el juego
     this.physics.pause();
+    // this.scene.get('Level' + (a + b)).setScore(this.score);
+    if (this.isLastLevel == false) {
+      this.sce
 
+      this.winText.setVisible(true);
+      // Reinicia el juego después de un tiempo o realiza otras acciones
+      this.time.delayedCall(3000, () => {
+        let a = this.sceneNumber;
+        let b = 1;
+
+
+        this.scene.start('Level' + (a + b));
+        this.scene.get('Level' + (a + b)).setScore(this.score);
+        this.scene.get('Level' + (a + b)).setBlueKeys(this.countBlueKeys);
+        this.scene.get('Level' + (a + b)).setRedKeys(this.countRedKeys);
+        this.scene.get('Level' + (a + b)).setYellowKeys(this.countYellowKeys);
+        // this.scene.restart(); // Reinicia la escena
+        // this.count = 0;
+        // this.score = 0; // Reinicia el puntaje si es necesario
+        // this.invetoryX = 20;
+      });
+    } else if (this.isLastLevel == true) {
+      this.scene.start('FinalScene');
+      this.scene.get('FinalScene').setLastScene(this.scene.key);
+    }
     // Mostrar mensaje de victoria
-    this.winText.setVisible(true);
-    // Reinicia el juego después de un tiempo o realiza otras acciones
-    this.time.delayedCall(3000, () => {
-      let a=this.sceneNumber;
-      let b=1;
-      this.scene.start('Level'+(a+b));
-      // this.scene.restart(); // Reinicia la escena
-      // this.count = 0;
-      // this.score = 0; // Reinicia el puntaje si es necesario
-      // this.invetoryX = 20;
-    });
 
+
+  }
+
+  //Setter y getter
+  setBlueKeys(count) {
+    this.countBlueKeys = count;
+  }
+  setRedKeys(count) {
+    this.countRedKeys = count;
+  }
+  setYellowKeys(count) {
+    this.countYellowKeys = count;
+  }
+
+  getBlueKeys() {
+    return this.countBlueKeys;
+  }
+  getRedKeys() {
+    return this.countRedKeys;
+  }
+  getYellowKeys() {
+    return this.countYellowKeys;
+  }
+
+
+  setScore(score) {
+    this.score = score;
+  }
+  getScore() {
+    return this.score;
   }
 
 
@@ -324,7 +382,7 @@ export default class Level extends Phaser.Scene {
     this.Ariene.update(this.cursors)
     this.updateScoreDisplay()
 
-    console.log(`Coordenadas: X=${this.Ariene.getCoordinatesX()}, Y=${this.Ariene.getCoordinatesY()}`);
+    // console.log(`Coordenadas: X=${this.Ariene.getCoordinatesX()}, Y=${this.Ariene.getCoordinatesY()}`);
 
   }
 

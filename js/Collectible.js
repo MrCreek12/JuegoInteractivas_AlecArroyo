@@ -4,7 +4,7 @@ export default class Collectible extends Phaser.GameObjects.Sprite {
       super(scene, x, y, key);
       
 
-
+      this.key = key;
       this.setScale(0.3);
       // Agrega el sprite a la escena
       scene.add.existing(this);
@@ -47,8 +47,25 @@ export default class Collectible extends Phaser.GameObjects.Sprite {
         this.body.x = this.scene.invetoryX;
         this.body.y = 140;
         this.setScrollFactor(0);
-      
+        console.log(this.key);
+
         this.scene.invetoryX += 50;
+
+        if(this.key === 'blue-key') {
+          this.scene.countBlueKeys += 1;
+          console.log(this.scene.countBlueKeys);
+        }
+        if(this.key === 'red-key') {
+          this.scene.countRedKeys += 1;
+          console.log(this.scene.countRedKeys);
+        }
+        if(this.key === 'yellow-key') {
+          this.scene.countYellowKeys += 1;
+          console.log(this.scene.countYellowKeys);
+
+        }
+
+        
     }
     }
   }
