@@ -14,7 +14,7 @@ let config = {
       Menu,
       //  constructor(key,cantVidas,itemScore,enemyScore,difficulty,jsonRoute,sceneNumber1,isLastLevel)
       
-      new Level('Level1',3, 10, 10, 1,'./data/levelData.json',1,false),  
+      new Level('Level1',3, 10, 10, 1,'http://juego-interactivas.test/DesarrolloDeAplicacionesInteractivas_ProyectoVidejuego_AlecArroyo/editor/api.php?id=1',1,false),  
       new Level('Level2',3, 10, 10, 2,'./data/levelData2.json',2,false),
       new Level('Level3',3, 10, 10, 3,'./data/levelData.json',3,true),
      

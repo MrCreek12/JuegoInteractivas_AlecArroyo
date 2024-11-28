@@ -1,3 +1,12 @@
+<?php 
+
+require './db.php';
+
+$players = $database->select('tb_players', ['id_player', 'username', 'country', 'score'], [
+    'ORDER' => ['score' => 'DESC']
+])
+?>
+
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -39,25 +48,34 @@
 
     <!-- login section -->
     <section class="login-section text-center text-white flex justify-content">
+         
+        <div class="login-card" >
+           <h2>RANKING</h2>
 
-        <div class="login-card">
-           
-            <div class="flex justify-content">
-                <img class="w70" src="imgs/MainLogo-2.png" alt="">
-            </div>
-            
-
-            <form class="" action="">
-                <input type="text" class="search-field" placeholder="Usuario">
-            </form>
-
-            <form action="">
-                <input type="password" class="search-field" placeholder="Contraseña">
-            </form>
-
-            <form action="">
-                <input type="submit" class="logIn-btn" value="Iniciar sesión">
-            </form>
+        <table >
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>User</th>
+            <th>Score</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody style="text-align: center;">
+        <?php
+        // Imprimir los jugadores en la tabla
+        $rank = 1;
+        foreach ($players as $player) {
+            echo "<tr>
+                    <td>" . $rank++ . "</td>
+                    <td>" . htmlspecialchars($player['username']) . "</td>
+                    <td>" . htmlspecialchars($player['score']) . "</td>
+                    <td>" . htmlspecialchars($player['country']) . "</td>
+                  </tr>";
+        }
+        ?>
+                 </tbody>
+            </table>
         </div>
 
 

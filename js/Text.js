@@ -94,6 +94,14 @@ export default class TextManager {
 
   }
 
+  getX() {
+    return this.textObject.x;
+  }
+
+  getY() {
+    return this.textObject.y;
+  }
+
   getButton() {
     return this.textObject;
   }

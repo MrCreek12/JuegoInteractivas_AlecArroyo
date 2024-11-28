@@ -77,11 +77,11 @@ export default class Level extends Phaser.Scene {
 
     this.load.image('enemy-idle', './game_assets/enemy-image.png');
     //Permite que los datos no se sobreescriban
-    this.load.json('level1-data', './data/levelData.json');
-    this.load.json('level2-data', './data/levelData2.json');
-    this.load.json('level3-data', './data/levelData3.json');
+    this.load.json('level1-data', 'http://juego-interactivas.test/DesarrolloDeAplicacionesInteractivas_ProyectoVidejuego_AlecArroyo/editor/api.php?id=1');
+    this.load.json('level2-data', 'http://juego-interactivas.test/DesarrolloDeAplicacionesInteractivas_ProyectoVidejuego_AlecArroyo/editor/api.php?id=1');
+    this.load.json('level3-data', 'http://juego-interactivas.test/DesarrolloDeAplicacionesInteractivas_ProyectoVidejuego_AlecArroyo/editor/api.php?id=1');
   };
-  
+
   init() {
     this.invetoryX = 20;
     if (this.sceneNumber == 1) {
@@ -95,7 +95,7 @@ export default class Level extends Phaser.Scene {
 
   create() {
     // this.score = 0;
-
+    this.winGame();
     this.count = 0;  // Definir la propiedad de scoreText
     this.lives = []; // Array para guardar los sprites de las vidas
     this.input.keyboard.enabled = true;
@@ -289,14 +289,14 @@ export default class Level extends Phaser.Scene {
     this.time.delayedCall(3000, () => {
       this.scene.restart(); // Reinicia la escena después de 3 segundos
       this.input.keyboard.enabled = true;
-      
+
       if(this.sceneNumber == 1){
 
         this.score = 0;
       } else {
         this.score = this.scene.get('Level' + (this.sceneNumber - 1)).getScore();
       }
-        
+
       this.count = 0;
       this.invetoryX = 20;
 
@@ -318,12 +318,16 @@ export default class Level extends Phaser.Scene {
         let a = this.sceneNumber;
         let b = 1;
 
-
+      //Normal Level
         this.scene.start('Level' + (a + b));
         this.scene.get('Level' + (a + b)).setScore(this.score);
         this.scene.get('Level' + (a + b)).setBlueKeys(this.countBlueKeys);
         this.scene.get('Level' + (a + b)).setRedKeys(this.countRedKeys);
         this.scene.get('Level' + (a + b)).setYellowKeys(this.countYellowKeys);
+
+        //Debugging
+
+
         // this.scene.restart(); // Reinicia la escena
         // this.count = 0;
         // this.score = 0; // Reinicia el puntaje si es necesario
@@ -353,10 +357,12 @@ export default class Level extends Phaser.Scene {
     return this.countBlueKeys;
   }
   getRedKeys() {
-    return this.countRedKeys;
+    return 1;
+    // return this.countRedKeys;
   }
   getYellowKeys() {
-    return this.countYellowKeys;
+    return 2;
+    // return this.countYellowKeys;
   }
 
 
@@ -364,7 +370,11 @@ export default class Level extends Phaser.Scene {
     this.score = score;
   }
   getScore() {
-    return this.score;
+
+    // return this.score;
+
+    //Debugging (Quitar)
+    return 150;
   }
 
 
