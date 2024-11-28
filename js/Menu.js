@@ -31,10 +31,10 @@ export default class Menu extends Phaser.Scene {
         // Título del menú
 
         // Botón "Jugar"
-        const playBtn = new Text(this, 'Esto es una prueba', this.menuX, this.menuY);
+        const playBtn = new Text(this, 'Jugar', this.menuX, this.menuY);
         playBtn.createButton();
 
-        const levelsBtn = new Text(this, 'Niveles', this.menuX, this.menuY + 100);
+        const levelsBtn = new Text(this, 'Novoles', this.menuX, this.menuY + 100);
         levelsBtn.createButton();
 
         const backBtn = new Text(this, 'Regresar', this.menuX, this.menuY + 200);

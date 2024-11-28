@@ -1,5 +1,5 @@
 <?php 
-
+$errorMessage = ''; // Variable para el mensaje de error
 require './db.php';
 
 if($_GET){
@@ -9,13 +9,30 @@ if($_GET){
 
 if (($_POST)) {
     date_default_timezone_set('America/Costa_Rica');
+      
     
-    $database->insert('tb_players', [
+     
+    $username = $_POST['username'];
+    $score = $_POST['score'];
+    $country = $_POST['country'];
+
+    // Verificar si el usuario ya existe
+    $existingUser = $database->get('tb_players', '*', [
+        "username" => $username,
+    ]);
+
+    if ($existingUser) {
+        $errorMessage = "El usuario ya existe. Por favor, elige otro nombre de usuario."; // Mensaje de error
+    } else {
+        $database->insert('tb_players', [
         "username" => $_POST['username'],
         // "password" => $_POST['password'],
         "score" => $_POST['score'],
         "country" => $_POST['country'],
-    ]); 
+    ]);
+
+    }
+     
 }
 ?>
 
@@ -61,7 +78,7 @@ if (($_POST)) {
     <!-- login section -->
     <section class="login-section text-center text-white flex justify-content">
 
-        <div class="login-card">
+        <div class="login-card ">
            
             <div class="flex justify-content">
                 <img class="w70" src="imgs/MainLogo-2.png" alt="">
@@ -70,10 +87,13 @@ if (($_POST)) {
 
 
             <form action="./register.php" method="POST">
+                 <?php if ($errorMessage): ?>
+                    <p style="font-size: 24px; color: red;"><?= $errorMessage ?></p>
+                <?php endif; ?>
                 <input type="text" name="username" class="search-field" placeholder="Usuario" style="color: white;">
                 <input type="password" name="password" class="search-field" placeholder="Contraseña">
                 <input type="text" name="score" class="search-field" style="width: 20%;" placeholder="Tu Puntaje" value="<?php echo $score; ?>">
-                <input type="text" name="country" class="search-field" style="width: 20%;" placeholder="Tu Pais">
+                <input type="text" name="country" class="search-field" style="width: 20%;"  placeholder="Tu Pais">
                 <input type="submit" class="logIn-btn" value="Registrarme">
             </form>
         </div>

@@ -35,7 +35,7 @@ export default class Pause extends Phaser.Scene {
         // Título del menú
 
         // Botón "Jugar"
-        const playBtn = new Text(this, 'Reanudar', this.menuX, this.menuY);
+        const playBtn = new Text(this, 'Ronodar', this.menuX, this.menuY);
         playBtn.createButton();
 
         const levelsBtn = new Text(this, 'Niveles', this.menuX, this.menuY + 100);

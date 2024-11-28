@@ -5,6 +5,8 @@ require './db.php';
 $players = $database->select('tb_players', ['id_player', 'username', 'country', 'score'], [
     'ORDER' => ['score' => 'DESC']
 ])
+
+
 ?>
 
 <!doctype html>
@@ -55,8 +57,8 @@ $players = $database->select('tb_players', ['id_player', 'username', 'country', 
         <table >
     <thead>
         <tr>
-            <th>#</th>
-            <th>User</th>
+            <th style="text-align: center; font-size: 20px">#</th>
+            <th  style="text-align: center; font-size: 20px">User</th>
             <th>Score</th>
             <th>Country</th>
         </tr>
@@ -66,7 +68,7 @@ $players = $database->select('tb_players', ['id_player', 'username', 'country', 
         // Imprimir los jugadores en la tabla
         $rank = 1;
         foreach ($players as $player) {
-            echo "<tr>
+            echo "<tr >
                     <td>" . $rank++ . "</td>
                     <td>" . htmlspecialchars($player['username']) . "</td>
                     <td>" . htmlspecialchars($player['score']) . "</td>

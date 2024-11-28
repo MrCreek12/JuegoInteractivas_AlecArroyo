@@ -15,7 +15,7 @@ export default class Level extends Phaser.Scene {
 
 
     this.score = 0;  // Variable de puntaje, comienza en 0
-    this.countBlueKeys= 0;
+    this.countBlueKeys = 0;
     this.countRedKeys = 0;
     this.countYellowKeys = 0;
 
@@ -95,7 +95,7 @@ export default class Level extends Phaser.Scene {
 
   create() {
     // this.score = 0;
-    this.winGame();
+
     this.count = 0;  // Definir la propiedad de scoreText
     this.lives = []; // Array para guardar los sprites de las vidas
     this.input.keyboard.enabled = true;
@@ -285,12 +285,13 @@ export default class Level extends Phaser.Scene {
     // Mostrar un texto de "Game Over"
     this.gameOverText.setVisible(true);
     this.input.keyboard.enabled = false;
+    this.sendData();
 
     this.time.delayedCall(3000, () => {
-      this.scene.restart(); // Reinicia la escena después de 3 segundos
+      // this.scene.restart(); // Reinicia la escena después de 3 segundos
       this.input.keyboard.enabled = true;
 
-      if(this.sceneNumber == 1){
+      if (this.sceneNumber == 1) {
 
         this.score = 0;
       } else {
@@ -318,7 +319,7 @@ export default class Level extends Phaser.Scene {
         let a = this.sceneNumber;
         let b = 1;
 
-      //Normal Level
+        //Normal Level
         this.scene.start('Level' + (a + b));
         this.scene.get('Level' + (a + b)).setScore(this.score);
         this.scene.get('Level' + (a + b)).setBlueKeys(this.countBlueKeys);
@@ -357,11 +358,11 @@ export default class Level extends Phaser.Scene {
     return this.countBlueKeys;
   }
   getRedKeys() {
-    return 1;
-    // return this.countRedKeys;
+
+    return this.countRedKeys;
   }
   getYellowKeys() {
-    return 2;
+    return this.countYellowKeys;
     // return this.countYellowKeys;
   }
 
@@ -374,8 +375,33 @@ export default class Level extends Phaser.Scene {
     // return this.score;
 
     //Debugging (Quitar)
-    return 150;
+    return this.score;
   }
+
+  sendData() {
+    fetch('http://juego-interactivas.test/DesarrolloDeAplicacionesInteractivas_ProyectoVidejuego_AlecArroyo/tracking.php', {
+      method: 'POST',
+      credentials: 'same-origin',
+      mode: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ "browser": navigator.userAgent,"screen": screen.width + "x" + screen.height, "length": 43, "level":this.sceneNumber,"closed":"Si" }),
+      keepalive: true
+    })
+    .then(response => response.text())  // Log the raw response as text first
+    .then(text => {
+      console.log('Response Text:', text);  // Inspect the raw response
+      try {
+        const data = JSON.parse(text);  // Try parsing it
+        console.log(data);  // If parsing succeeds, log the JSON
+      } catch (e) {
+        console.error('Failed to parse JSON:', e);  // Log the error if parsing fails
+      }
+    })
+    .catch(error => console.error('Error:', error));  // Catch network or other errors
+  }
+  
 
 
   update() {

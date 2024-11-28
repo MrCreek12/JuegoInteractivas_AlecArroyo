@@ -1,6 +1,9 @@
 <?php 
     require '../db.php';
     $gameConfigs = $database->select('tb_game_config', '*');
+    $players = $database->select('tb_players', ['id_player', 'username', 'country', 'score'], [
+        'ORDER' => ['score' => 'DESC']
+    ])
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Js-gameConfig</title>
     <a href="./add.php">Create Game Config</a>
+    <a href="../index.html">Regresar a Landing page</a>
 </head>
 <body>
     <h1>Registered Game Configs</h1>
@@ -28,6 +32,31 @@
                         <a target='_blank' href='./api.php?id={$gameConfig['id_game_config']}'>View</a>
                         <a href='./edit.php?id={$gameConfig['id_game_config']}'>Edit</a>
                         <a href='./delete.php?id={$gameConfig['id_game_config']}'>Delete</a>
+                    </td>";
+                echo "</tr>";
+            }
+        ?>
+    </tr> 
+    </table>
+    <h1>Registered Players</h1>
+    <table border="1">
+       <tr>
+        <th>Id</th>
+        <th>Player</th>
+        <th>Score</th>
+        <th>Country</th>
+        <th>ACtions</th>
+
+        <?php 
+            foreach($players as $player){
+                echo "<tr>";
+                echo "<td>{$player['id_player']}</td>";
+                echo "<td>{$player['username']}</td>";
+                echo "<td>{$player['score']}</td>";
+                echo "<td>{$player['country']}</td>";
+                echo "<td>
+                        <a href='./editPlayer.php?id={$player['id_player']}'>Edit</a>
+                        <a href='./deletePlayer.php?id={$player['id_player']}'>Delete</a>
                     </td>";
                 echo "</tr>";
             }

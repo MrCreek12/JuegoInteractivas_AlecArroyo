@@ -1,5 +1,32 @@
 <?php 
+$errorMessage = ''; // Variable para el mensaje de error
+
     require './db.php';
+    $isValid = false;
+    if($_POST){
+        
+        $user = $database->select("tb_users","*",[
+            "username"=> $_POST["username"]
+        ]);
+
+        if(count($user) > 0){
+            if(($_POST["password"]==$user[0]["password"])){
+                
+                session_start();
+                $_SESSION["username"] = $user[0]["username"];
+                 header("Location: ./editor/index.php"); // Redirigir a admin
+              
+            }else{
+                $errorMessage = "Usuario o Contraseña incorrectos"; // Mensaje de error
+
+                $isValid = false;
+            }
+        }else{
+            $isValid = false;
+        }
+    }
+
+    
 ?>
 
 <!doctype html>
@@ -40,24 +67,29 @@
 </head>
 
 <body>
-
     <!-- login section -->
     <section class="login-section text-center text-white flex justify-content">
 
         <div class="login-card">
            
             <div class="flex justify-content">
-                <img class="w70" src="imgs/MainLogo-2.png" alt="">
+                <img class="w50" src="imgs/MainLogo-2.png" alt="">
             </div>
             
 
-
-            <form action="">
-                <input type="text" class="search-field" placeholder="Usuario" style="color: white;">
-                <input type="password" class="search-field" placeholder="Contraseña">
-                <input type="text" class="search-field" style="width: 20%;" placeholder="Puntaje">
-                <input type="submit" class="logIn-btn" value="Iniciar sesión">
+           <div class="flex justify-content">
+            
+           <form class="login-card " action="./login.php" method="POST">
+           <?php if ($errorMessage): ?>
+                    <p style="font-size: 24px; color: red;"><?= $errorMessage ?></p>
+                <?php endif; ?>
+                <input type="text" name="username" class="search-field w70" placeholder="Usuario" style="color: white;">
+                <input type="password" name="password" class="search-field" placeholder="Contraseña">
+                <input type="submit" class="logIn-btn display-block" value="Iniciar sesión">
             </form>
+
+           </div>
+           
         </div>
 
 
