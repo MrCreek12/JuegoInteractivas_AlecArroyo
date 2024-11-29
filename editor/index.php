@@ -1,9 +1,13 @@
 <?php 
     require '../db.php';
     $gameConfigs = $database->select('tb_game_config', '*');
+    $sessions = $database->select('tb_tracking', '*');
+
     $players = $database->select('tb_players', ['id_player', 'username', 'country', 'score'], [
         'ORDER' => ['score' => 'DESC']
     ])
+   
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,6 +61,36 @@
                 echo "<td>
                         <a href='./editPlayer.php?id={$player['id_player']}'>Edit</a>
                         <a href='./deletePlayer.php?id={$player['id_player']}'>Delete</a>
+                    </td>";
+                echo "</tr>";
+            }
+        ?>
+    </tr> 
+    </table>
+    <h1>Registered Sessions</h1>
+    <table border="1">
+       <tr>
+        <th>Id</th>
+        <th>length</th>
+        <th>Level</th>
+        <th>Device type</th>
+        <th>Screen size</th>
+        <th>has closed</th>
+        <th>date</th>
+        <th>Actions</th>
+
+        <?php 
+            foreach($sessions as $session){
+                echo "<tr>";
+                echo "<td>{$session['id_tracking']}</td>";
+                echo "<td>{$session['length']}</td>";
+                echo "<td>{$session['level']}</td>";
+                echo "<td>{$session['device_type']}</td>";
+                echo "<td>{$session['screen_size']}</td>";
+                echo "<td>{$session['has_closed_browser']}</td>";
+                echo "<td>{$session['date']}</td>";
+                echo "<td>
+                        <a href='./deleteSession.php?id={$session['id_tracking']}'>Delete</a>
                     </td>";
                 echo "</tr>";
             }

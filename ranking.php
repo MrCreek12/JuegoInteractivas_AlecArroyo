@@ -3,7 +3,8 @@
 require './db.php';
 
 $players = $database->select('tb_players', ['id_player', 'username', 'country', 'score'], [
-    'ORDER' => ['score' => 'DESC']
+    'ORDER' => ['score' => 'DESC'],
+    'LIMIT' => 10  // Limitar los resultados a los primeros 10
 ])
 
 
@@ -51,34 +52,38 @@ $players = $database->select('tb_players', ['id_player', 'username', 'country', 
     <!-- login section -->
     <section class="login-section text-center text-white flex justify-content">
          
-        <div class="login-card" >
-           <h2>RANKING</h2>
+    <div class="login-card">
+    <h2>RANKING</h2>
+    <div class="flex justify-content">
+          <table>
+        <thead>
+            <tr>
+                <th style="text-align: center; font-size: 20px">#</th>
+                <th style="text-align: center; font-size: 20px">User</th>
+                <th style="text-align: center; font-size: 20px">Score</th>
+                <th style="text-align: center; font-size: 20px">Country</th>
+            </tr>
+        </thead>
+        <tbody style="text-align: center;">
+            <?php
+                // Imprimir los jugadores en la tabla
+                $rank = 1;
+                $points = ".";
+                foreach ($players as $player) {
+                    echo "<tr style='font-size: 20px'>
+                            <td>" . $rank++ .   ".</td>
+                            <td>" . htmlspecialchars($player['username']) . "</td>
+                            <td>" . htmlspecialchars($player['score']) . "</td>
+                            <td>" . htmlspecialchars($player['country']) . "</td>
+                          </tr>";
+                }
+            ?>
+        </tbody>
+    </table>  
+    
+</div>
 
-        <table >
-    <thead>
-        <tr>
-            <th style="text-align: center; font-size: 20px">#</th>
-            <th  style="text-align: center; font-size: 20px">User</th>
-            <th>Score</th>
-            <th>Country</th>
-        </tr>
-    </thead>
-    <tbody style="text-align: center;">
-        <?php
-        // Imprimir los jugadores en la tabla
-        $rank = 1;
-        foreach ($players as $player) {
-            echo "<tr >
-                    <td>" . $rank++ . "</td>
-                    <td>" . htmlspecialchars($player['username']) . "</td>
-                    <td>" . htmlspecialchars($player['score']) . "</td>
-                    <td>" . htmlspecialchars($player['country']) . "</td>
-                  </tr>";
-        }
-        ?>
-                 </tbody>
-            </table>
-        </div>
+</div>
 
 
     </section>

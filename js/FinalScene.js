@@ -10,7 +10,7 @@ export default class FinalScene extends Phaser.Scene {
         this.final = 0
         this.finalScoreText = null
         this.backBtn = null
-        this.linkReady= 0;
+        this.linkReady = 0;
     }
 
     setFinalScores(score, blueKeys, redKeys, yellowKeys) {
@@ -30,7 +30,7 @@ export default class FinalScene extends Phaser.Scene {
         // Agrega la imagen de fondo
 
         this.createBackground();
-       
+
         // Título del menú
         const menuTitle = new Text(this, 'Haz completado todos los niveles', this.menuX - 50, this.menuY);
         menuTitle.setVisible(true);
@@ -40,11 +40,11 @@ export default class FinalScene extends Phaser.Scene {
         const cantLlavesRojas = this.scene.get(this.lastScene).getRedKeys();
         const cantLlavesAmarillas = this.scene.get(this.lastScene).getYellowKeys();
 
-         this.calcularPuntajeFinal(cantLlavesAmarillas, cantLlavesAzules, cantLlavesRojas);
-         
+        this.calcularPuntajeFinal(cantLlavesAmarillas, cantLlavesAzules, cantLlavesRojas);
+
         this.createRegisterText(this.done);
 
-        
+
 
         this.finalScoreText = new Text(this, 'Puntaje final: ' + this.finalLevelScore, this.menuX, this.menuY + 100);
         this.finalScoreText.setVisible(true);
@@ -84,14 +84,14 @@ export default class FinalScene extends Phaser.Scene {
         this.time.delayedCall(5000, () => {
             this.done = true
             this.i = this.finalLevelScore
-           this.time.delayedCall(1000, () => {
-               this.createLink(this.linkReady);
-           }) 
+            this.time.delayedCall(1000, () => {
+                this.createLink(this.linkReady);
+            })
         });
 
     }
 
-    createBackground(){
+    createBackground() {
         const miImagen = this.add.image(0, 0, 'mainMenuBg').setOrigin(0.0);
         this.add.image(330, 230, 'logo').setScale(0.7);
 
@@ -168,38 +168,56 @@ export default class FinalScene extends Phaser.Scene {
         this.registerText = new Text(this, '¡Registrate para guardar tu puntaje!', this.menuX - 600, this.menuY + 330);
         this.registerText.setVisible(false);
 
-        //  this.goRegister = new Text(this, 'Ir A registrarse', this.registerText.getButton().x+120, this.registerText.getButton().y+100);
-        // this.goRegister.createButton();
-        //  this.goRegister.setVisible(false);
+        this.goRanking = new Text(this, 'Ver el Ranking', this.menuX - 490, this.menuY - 80);
+        this.goRanking.createButton();
+        this.goRanking.setVisible(false);
 
-        // this.goRegister.getButton().on('pointerdown', () => {
-        //     this.sendFinalScore();
-        //     window.location.href = './register.php'; // Cambia esto por la URL o archivo HTML deseado
-        // });
+        this.goRanking.getButton().on('pointerdown', () => {
+            window.location.href = './ranking.php'; // Cambia esto por la URL o archivo HTML deseado
+        });
 
 
     }
+    generateHash(score) {
+        return CryptoJS.MD5(score + this.secretKey).toString();
+    }
 
     createLink() {
-       
+         this.secretKey = "AURI";
+
+        // Calcula el hash
+         
+
+        // Genera el enlace dinámico
+        const finalScore = this.final - 5; // Calcula el puntaje
+        const hash = this.generateHash(finalScore); // Genera el hash
+
+        // Construye el enlace
         this.enlace = document.createElement("a");
-        this.enlace.href = "./register.php?score=" + (this.final-5) + "";  // Evita que el enlace haga una redirección
+
+         //Usar este si el CDN NO FUNCIONA
+        //  this.enlace.href = "./register.php?score=" + (this.final-5) + "";  // Evita que el enlace haga una redirección
+
+        //USAR estre si el CDN SI FUNCIONA
+         this.enlace.href = `./register.php?score=${finalScore}&hash=${hash}`;
+
+
         this.enlace.innerHTML = "Ir a Registrarse";  // Asigna el puntaje como texto del enlace
 
         // Establecer el estilo para colocarlo en el canvas
         this.enlace.style.position = "absolute";  // Asegura que el enlace esté posicionado en relación al documento
         this.enlace.style.top = (this.menuY + 500) + "px";  // Ajustar top según el valor de menuY
         this.enlace.style.left = (this.menuX - 150) + "px";  // Usar el mismo valor para left
-        
+
         this.enlace.style.opacity = this.linkReady;
         this.enlace.style.transform = "translate(0, 0)";  // Sin centrar, se posiciona en las coordenadas especificadas
-        
+
         // Estilos adicionales para hacerlo parecer un enlace
         this.enlace.style.fontSize = "30px";
         this.enlace.style.color = "white";  // El color de la letra es blanco
         this.enlace.style.textDecoration = "none";  // Se quita el subrayado
         this.enlace.style.cursor = "pointer";  // Para que se vea clickeable
-        
+
         // Estilo de hover para cambiar el color
         this.enlace.style.transition = "color 0.3s ease";  // Transición suave en el cambio de color
         this.enlace.addEventListener("mouseover", () => {
@@ -208,9 +226,11 @@ export default class FinalScene extends Phaser.Scene {
         this.enlace.addEventListener("mouseout", () => {
             this.enlace.style.color = "white";  // Vuelve a blanco cuando el cursor se retira
         });
-        
+
         // Agregar el enlace al body
         document.body.appendChild(this.enlace);
+
+
     }
 
     update() {
@@ -230,8 +250,8 @@ export default class FinalScene extends Phaser.Scene {
                     this.backBtn.setVisible(true);
                     this.registerText.setVisible(true);
                     this.enlace.style.opacity = 1;
-                    // this.goRegister.setVisible(true);
-                    
+                    this.goRanking.setVisible(true);
+
                 });
 
             }

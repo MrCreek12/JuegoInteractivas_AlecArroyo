@@ -6,6 +6,7 @@ import Enemy from "./enemy.js";
 import CollisionManager from "./CollisionManajer.js";
 import Text from "./Text.js";
 
+
 export default class Level extends Phaser.Scene {
   constructor(key, cantVidas, itemScore, enemyScore, difficulty, jsonRoute, sceneNumber, isLastLevel) {
     super({ key: key });
@@ -28,7 +29,9 @@ export default class Level extends Phaser.Scene {
     this.enemyScore = enemyScore;
     this.jsonRoute = jsonRoute
     this.sceneNumber = sceneNumber
-
+   
+    this.elapsedTime = null;
+    this.windowClosed = "No";
 
     this.scoreText = null;  // Definir la propiedad de scoreText
 
@@ -78,12 +81,13 @@ export default class Level extends Phaser.Scene {
     this.load.image('enemy-idle', './game_assets/enemy-image.png');
     //Permite que los datos no se sobreescriban
     this.load.json('level1-data', 'http://juego-interactivas.test/DesarrolloDeAplicacionesInteractivas_ProyectoVidejuego_AlecArroyo/editor/api.php?id=1');
-    this.load.json('level2-data', 'http://juego-interactivas.test/DesarrolloDeAplicacionesInteractivas_ProyectoVidejuego_AlecArroyo/editor/api.php?id=1');
-    this.load.json('level3-data', 'http://juego-interactivas.test/DesarrolloDeAplicacionesInteractivas_ProyectoVidejuego_AlecArroyo/editor/api.php?id=1');
+    this.load.json('level2-data', 'http://juego-interactivas.test/DesarrolloDeAplicacionesInteractivas_ProyectoVidejuego_AlecArroyo/editor/api.php?id=2');
+    this.load.json('level3-data', 'http://juego-interactivas.test/DesarrolloDeAplicacionesInteractivas_ProyectoVidejuego_AlecArroyo/editor/api.php?id=3');
   };
 
   init() {
     this.invetoryX = 20;
+    this.windowClosed = "No";
     if (this.sceneNumber == 1) {
       this.score = 0;
       this.countBlueKeys = 0;
@@ -93,9 +97,16 @@ export default class Level extends Phaser.Scene {
   }
 
 
+
   create() {
     // this.score = 0;
-
+    window.addEventListener('beforeunload', () => {
+       this.windowClosed = "Si"; // Indica que la ventana se está cerrando
+      
+      // Enviar al servidor
+        this.sendData();
+    });
+    this.setTimer();
     this.count = 0;  // Definir la propiedad de scoreText
     this.lives = []; // Array para guardar los sprites de las vidas
     this.input.keyboard.enabled = true;
@@ -183,13 +194,13 @@ export default class Level extends Phaser.Scene {
     // Crear enemigos a partir de los datos de nivel
     this.levelData.enemy.forEach((item) => {
       if (item.type == 1) {
-        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', 0, item.type, this.enemyScore, this.difficulty);  // Crear una instancia de Enemy
+        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.speed, item.type, this.enemyScore, this.difficulty);  // Crear una instancia de Enemy
         this.physics.add.collider(this.Ariene, enemy, (player, enemy) => this.collisionManager.hitPlayer(player, enemy), null, this);
         this.enemies.add(enemy);  // Añadir el enemigo al grupo de enemigos
       }
 
       if (item.type == 2) {
-        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', 0, item.type, this.enemyScore, this.difficulty);  // Crear una instancia de Enemy
+        let enemy = new Enemy(this, item.x, item.y, 'enemy-idle', item.speed, item.type, this.enemyScore, this.difficulty);  // Crear una instancia de Enemy
         this.physics.add.collider(this.Ariene, enemy, (player, enemy) => this.collisionManager.hitPlayer(player, enemy), null, this);
         this.enemies.add(enemy);  // Añadir el enemigo al grupo de enemigos
       }
@@ -288,7 +299,7 @@ export default class Level extends Phaser.Scene {
     this.sendData();
 
     this.time.delayedCall(3000, () => {
-      // this.scene.restart(); // Reinicia la escena después de 3 segundos
+       this.scene.restart(); // Reinicia la escena después de 3 segundos
       this.input.keyboard.enabled = true;
 
       if (this.sceneNumber == 1) {
@@ -307,6 +318,7 @@ export default class Level extends Phaser.Scene {
 
 
   winGame() {
+    this.sendData();
     // Pausa el juego
     this.physics.pause();
     // this.scene.get('Level' + (a + b)).setScore(this.score);
@@ -386,7 +398,7 @@ export default class Level extends Phaser.Scene {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ "browser": navigator.userAgent,"screen": screen.width + "x" + screen.height, "length": 43, "level":this.sceneNumber,"closed":"Si" }),
+      body: JSON.stringify({ "browser": navigator.userAgent,"screen": screen.width + "x" + screen.height, "length": this.elapsedTime, "level":this.sceneNumber,"closed":this.windowClosed }),
       keepalive: true
     })
     .then(response => response.text())  // Log the raw response as text first
@@ -396,11 +408,36 @@ export default class Level extends Phaser.Scene {
         const data = JSON.parse(text);  // Try parsing it
         console.log(data);  // If parsing succeeds, log the JSON
       } catch (e) {
-        console.error('Failed to parse JSON:', e);  // Log the error if parsing fails
+        console.error('Error:', e);
+        // Alert message for parsing errors, but continue execution
       }
     })
-    .catch(error => console.error('Error:', error));  // Catch network or other errors
+    .catch(error => {
+      console.error('Network or other error:', error);  // Catch network or other errors
+      // Optional: Show an alert for network errors without crashing
+      // alert('Hubo un error de red. Por favor, inténtalo de nuevo.');
+    });
   }
+
+  setTimer() {
+    this.elapsedTime = 0;
+
+    // Crear un texto que se actualizará con el tiempo
+    // Crear un evento que se dispara cada segundo
+    this.time.addEvent({
+      delay: 1000, // 1000ms = 1 segundo
+      callback: this.updateTimer,
+      callbackScope: this,
+      loop: true // Repetir el evento cada segundo
+    });
+  }
+  
+
+  updateTimer() {
+    this.elapsedTime += 1; // Incrementa el contador en 1 segundo
+  }
+
+  
   
 
 

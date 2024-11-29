@@ -4,14 +4,39 @@ require './db.php';
 
 if($_GET){
     // Reference: https://medoo.in/api/where
-    $score = $_GET["score"];
+    if(isset($_GET["score"]) && isset($_GET["hash"]) ){
+
+     $score = $_GET["score"];
+     $hash = $_GET["hash"];
+
+      $secretKey = "AURI";
+
+     // Recalcular el hash esperado
+       $expectedHash = md5($score . $secretKey);
+
+      // Validar el hash recibido
+      if ($hash !== $expectedHash) {
+        die("Error: Puntaje manipulado o inválido.");
+      } 
+      if($hash == $expectedHash){
+        $show=$score;
+      } 
+ 
+
+    } else{
+        $show=$_GET["score"];
+    }
+    
+    
+
+
 }
 
 if (($_POST)) {
     date_default_timezone_set('America/Costa_Rica');
       
     
-     
+     $show=0;
     $username = $_POST['username'];
     $score = $_POST['score'];
     $country = $_POST['country'];
@@ -32,7 +57,7 @@ if (($_POST)) {
     ]);
 
     }
-     
+     header("Location: ./index.html");
 }
 ?>
 
@@ -91,8 +116,7 @@ if (($_POST)) {
                     <p style="font-size: 24px; color: red;"><?= $errorMessage ?></p>
                 <?php endif; ?>
                 <input type="text" name="username" class="search-field" placeholder="Usuario" style="color: white;">
-                <input type="password" name="password" class="search-field" placeholder="Contraseña">
-                <input type="text" name="score" class="search-field" style="width: 20%;" placeholder="Tu Puntaje" value="<?php echo $score; ?>">
+                <input type="text" name="score" class="search-field" style="width: 20%;color: lightblue;" placeholder="Tu Puntaje" value="<?php echo $show; ?>"readonly>
                 <input type="text" name="country" class="search-field" style="width: 20%;"  placeholder="Tu Pais">
                 <input type="submit" class="logIn-btn" value="Registrarme">
             </form>
